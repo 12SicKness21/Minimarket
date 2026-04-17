@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-display {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Scroll snap para carrusel */
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Animación toast carrito */
+@keyframes bounce-in {
+  0%   { opacity: 0; transform: translateY(12px) translateX(-50%); }
+  60%  { opacity: 1; transform: translateY(-4px) translateX(-50%); }
+  100% { transform: translateY(0) translateX(-50%); }
+}
+.animate-bounce-in {
+  animation: bounce-in 0.3s ease-out forwards;
+}
+
+/* Ocultar scrollbar en carrusel */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
