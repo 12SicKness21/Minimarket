@@ -4,3 +4,4 @@ dist
 *.local
 .DS_Store
 functions/node_modules
+.claude/
