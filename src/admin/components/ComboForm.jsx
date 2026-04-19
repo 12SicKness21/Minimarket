@@ -104,8 +104,8 @@ export default function ComboForm({ combo, onGuardar, onCerrar, guardando }) {
     : [];
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="font-display font-bold text-lg">
             {combo ? 'Editar combo' : 'Nuevo combo'}
@@ -242,7 +242,7 @@ export default function ComboForm({ combo, onGuardar, onCerrar, guardando }) {
             <span className="text-sm font-medium text-gray-700">Activo</span>
           </label>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <button
               type="submit"
               disabled={guardando}
@@ -253,7 +253,7 @@ export default function ComboForm({ combo, onGuardar, onCerrar, guardando }) {
             <button
               type="button"
               onClick={onCerrar}
-              className="px-6 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition"
+              className="sm:px-6 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition"
             >
               Cancelar
             </button>

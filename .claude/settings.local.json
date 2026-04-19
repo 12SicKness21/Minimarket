@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx vite:*)",
+      "Bash(./node_modules/.bin/vite build:*)",
+      "Bash(ls /c/PROYECTOS/Minimarket/node_modules/.bin/vite*)",
+      "Bash(node /c/PROYECTOS/Minimarket/node_modules/vite/bin/vite.js build)",
+      "Bash(tasklist)",
+      "Bash(taskkill //F //IM esbuild.exe)",
+      "Bash(cmd //c \"rmdir /s /q node_modules\")",
+      "Bash(cmd //c \"if exist node_modules rmdir /s /q node_modules\")",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(npm run:*)",
+      "Bash(firebase --version)",
+      "Bash(firebase projects:list)",
+      "Bash(firebase use:*)",
+      "Bash(firebase functions:config:set resend.key=re_iGYZ5ViW_L3pmWRJBruvq5x2mACCukLRk algolia.app_id=6e7d33b5b4d1ed124200551ce3876879 algolia.admin_key=b08086b06d1e3c424426b8091130081e)",
+      "Bash(firebase deploy:*)",
+      "Bash(gcloud services:*)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(grep -oE \"[a-zA-Z0-9_$]{0,5}React[a-zA-Z0-9_$]{0,20}\" index-Dv0wiU57.js)",
+      "Bash(grep -oE \"[a-zA-Z0-9_$]{0,5}React[a-zA-Z0-9_$]{0,20}\" dist/assets/index-Dv0wiU57.js)",
+      "Bash(grep -oE \"[^a-zA-Z0-9_$]React[\\\\.\\\\\\(]?\" index-Dv0wiU57.js)",
+      "Bash(grep -oE \".{30}[^a-zA-Z0-9_$]React[^a-zA-Z0-9_$]\" /c/PROYECTOS/Minimarket/dist/assets/index-Dv0wiU57.js)"
+    ]
+  }
+}

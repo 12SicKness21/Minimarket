@@ -61,9 +61,9 @@ export default function AdminLayout({ children }) {
 
       {/* Mobile header */}
       <div className="flex-1 flex flex-col">
-        <header className="md:hidden bg-white border-b px-4 py-3 flex items-center justify-between">
-          <span className="font-display font-bold text-primario">🛒 Admin</span>
-          <div className="flex gap-2">
+        <header className="md:hidden bg-white border-b px-4 py-3 flex items-center gap-3 flex-wrap">
+          <span className="font-display font-bold text-primario whitespace-nowrap">🛒 Admin</span>
+          <div className="flex items-center gap-1 flex-wrap">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.path}

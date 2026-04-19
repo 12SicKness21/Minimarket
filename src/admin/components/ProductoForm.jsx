@@ -84,8 +84,8 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="font-display font-bold text-lg">
             {producto ? 'Editar producto' : 'Nuevo producto'}
@@ -213,7 +213,7 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
           </div>
 
           {/* Toggles */}
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -237,7 +237,7 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
           </div>
 
           {/* Botones */}
-          <div className="flex gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <button
               type="submit"
               disabled={guardando}
@@ -248,7 +248,7 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
             <button
               type="button"
               onClick={onCerrar}
-              className="px-6 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition"
+              className="sm:px-6 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition"
             >
               Cancelar
             </button>
@@ -256,7 +256,7 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
               <button
                 type="button"
                 onClick={() => onEliminar(producto.id)}
-                className="px-6 py-2.5 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-full transition"
+                className="sm:px-6 py-2.5 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-full transition"
               >
                 Eliminar
               </button>
