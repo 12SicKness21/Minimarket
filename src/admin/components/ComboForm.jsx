@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { obtenerTodosProductos } from '../../firebase/productos';
 import { formatPrecio } from '../../shared/utils/formatters';
 
@@ -103,7 +104,13 @@ export default function ComboForm({ combo, onGuardar, onCerrar, guardando }) {
       )
     : [];
 
-  return (
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  return createPortal(
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-2 sm:p-4">
       <div className="bg-white rounded-2xl max-w-2xl w-full h-[96vh] sm:h-auto sm:max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b">
@@ -260,6 +267,7 @@ export default function ComboForm({ combo, onGuardar, onCerrar, guardando }) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
