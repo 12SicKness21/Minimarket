@@ -21,7 +21,7 @@ const Alertas = lazy(() => import('./admin/pages/Alertas'));
 const Configuracion = lazy(() => import('./admin/pages/Configuracion'));
 const Catalogos = lazy(() => import('./admin/pages/Catalogos'));
 const AdminLayout = lazy(() => import('./admin/components/AdminLayout'));
-//const SeedPage = lazy(() => import('./SeedPage'));
+
 
 function Cargando() {
   return (
@@ -72,7 +72,7 @@ export default function App() {
           {/* Tienda */}
           <Route path="/" element={<Home />} />
           <Route path="/catalogo" element={<Catalogo />} />
-          <Route path="/seed" element={<SeedPage />} />
+
 
           {/* Admin */}
           <Route path="/admin/login" element={
