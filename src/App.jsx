@@ -21,7 +21,7 @@ const Alertas = lazy(() => import('./admin/pages/Alertas'));
 const Configuracion = lazy(() => import('./admin/pages/Configuracion'));
 const Catalogos = lazy(() => import('./admin/pages/Catalogos'));
 const AdminLayout = lazy(() => import('./admin/components/AdminLayout'));
-const SeedPage = lazy(() => import('./SeedPage'));
+//const SeedPage = lazy(() => import('./SeedPage'));
 
 function Cargando() {
   return (
