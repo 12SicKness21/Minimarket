@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icon.png'],
+      includeAssets: ['favicon.svg', 'icon.png', 'icon-maskable.png'],
       manifest: {
         name: 'Minimarket',
         short_name: 'Minimarket',
@@ -30,6 +30,13 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
+          },
+          {
+            // Versión con fondo sólido para íconos adaptativos de Android
+            src: 'icon-maskable.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
       },
