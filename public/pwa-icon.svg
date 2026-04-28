@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fondo verde redondeado -->
+  <rect width="512" height="512" rx="96" fill="#16a34a"/>
+  <!-- Carrito de compras (path limpio, sin emoji) -->
+  <!-- Cuerpo del carrito -->
+  <path d="M120 160 h40 l48 176 h160 l40 -120 H184" stroke="white" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Ruedas -->
+  <circle cx="224" cy="368" r="22" fill="white"/>
+  <circle cx="336" cy="368" r="22" fill="white"/>
+  <!-- Líneas internas del carrito -->
+  <line x1="248" y1="256" x2="264" y2="316" stroke="white" stroke-width="14" stroke-linecap="round" opacity="0.6"/>
+  <line x1="296" y1="256" x2="296" y2="316" stroke="white" stroke-width="14" stroke-linecap="round" opacity="0.6"/>
+  <line x1="344" y1="256" x2="328" y2="316" stroke="white" stroke-width="14" stroke-linecap="round" opacity="0.6"/>
+  <!-- Punto amarillo decorativo (colores de marca) -->
+  <circle cx="376" cy="168" r="32" fill="#eab308"/>
+  <text x="376" y="178" text-anchor="middle" font-size="32" font-family="sans-serif" fill="white" font-weight="bold">+</text>
+</svg>
