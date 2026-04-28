@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'pwa-icon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.svg', 'icon.png'],
       manifest: {
         name: 'Minimarket',
         short_name: 'Minimarket',
@@ -20,16 +20,19 @@ export default defineConfig({
         lang: 'es',
         icons: [
           {
-            src: 'pwa-192.png',
+            src: 'icon.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any',
           },
           {
-            src: 'pwa-512.png',
+            src: 'icon.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any',
           },
           {
+            // Maskable: fondo verde sólido para ícono adaptativo en Android
             src: 'pwa-512.png',
             sizes: '512x512',
             type: 'image/png',
