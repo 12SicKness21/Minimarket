@@ -32,6 +32,11 @@ body {
   animation: bounce-in 0.3s ease-out forwards;
 }
 
+/* Safe area para iPhone home indicator */
+.safe-area-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
 /* Ocultar scrollbar en carrusel */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
