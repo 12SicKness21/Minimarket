@@ -14,6 +14,7 @@ export default function ComboForm({ combo, onGuardar, onCerrar, onEliminar, guar
   const [previewUrl, setPreviewUrl] = useState('');
   const [todosProductos, setTodosProductos] = useState([]);
   const [busqueda, setBusqueda] = useState('');
+  const [comprimiendo, setComprimiendo] = useState(false);
 
   useEffect(() => {
     obtenerTodosProductos().then(setTodosProductos);
@@ -74,11 +75,32 @@ export default function ComboForm({ combo, onGuardar, onCerrar, onEliminar, guar
     }));
   }
 
-  function handleImagen(e) {
+  async function handleImagen(e) {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+
+    // Preview inmediato con el archivo original
+    setPreviewUrl(URL.createObjectURL(file));
+
+    // Pre-comprimir en el cliente para mostrar una preview rápida y
+    // evitar que el browser se congele al guardar un archivo de 50+ MB
+    try {
+      setComprimiendo(true);
+      const { default: imageCompression } = await import('browser-image-compression');
+      const comprimida = await imageCompression(file, {
+        maxWidthOrHeight: 1200,
+        maxSizeMB: 1,
+        initialQuality: 0.7,
+        useWebWorker: true,
+        fileType: 'image/jpeg',
+      });
+      setImagen(comprimida);
+      setPreviewUrl(URL.createObjectURL(comprimida));
+    } catch {
+      // Si falla la compresión, usar el archivo original
       setImagen(file);
-      setPreviewUrl(URL.createObjectURL(file));
+    } finally {
+      setComprimiendo(false);
     }
   }
 
@@ -132,11 +154,22 @@ export default function ComboForm({ combo, onGuardar, onCerrar, onEliminar, guar
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Imagen</label>
-            <input type="file" accept="image/*" onChange={handleImagen} className="text-sm" />
-            {previewUrl && (
-              <img src={previewUrl} alt="Preview" className="mt-2 w-24 h-24 object-cover rounded-xl" />
-            )}
+            <label className="block text-sm font-medium text-gray-700 mb-2">Imagen</label>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <div className="w-20 h-20 shrink-0 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden hover:border-primario transition relative">
+                {comprimiendo
+                  ? <div className="flex flex-col items-center gap-1 text-xs text-gray-400 text-center px-1"><span className="animate-spin text-lg">⏳</span>Comprimiendo…</div>
+                  : previewUrl
+                    ? <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                    : <span className="text-2xl">📷</span>
+                }
+              </div>
+              <div className="text-sm text-gray-500">
+                <span className="text-primario font-medium">Toca para elegir</span> o arrastra una foto
+                <p className="text-xs text-gray-400 mt-0.5">Cualquier tamaño · se comprime automáticamente</p>
+              </div>
+              <input type="file" accept="image/*" onChange={handleImagen} className="sr-only" />
+            </label>
           </div>
 
           {/* Buscar y añadir productos */}
@@ -269,10 +302,10 @@ export default function ComboForm({ combo, onGuardar, onCerrar, onEliminar, guar
             </button>
             <button
               type="submit"
-              disabled={guardando}
+              disabled={guardando || comprimiendo}
               className="flex-1 bg-primario hover:bg-green-700 text-white font-bold py-2.5 rounded-full transition disabled:opacity-50 text-sm"
             >
-              {guardando ? 'Guardando…' : combo ? 'Guardar cambios' : 'Crear combo'}
+              {comprimiendo ? 'Comprimiendo…' : guardando ? 'Guardando…' : combo ? 'Guardar cambios' : 'Crear combo'}
             </button>
           </div>
         </form>

@@ -63,10 +63,14 @@ export async function actualizarCombo(id, data, imagenFile) {
 }
 
 async function subirImagenCombo(comboId, file) {
+  // Comprime en dos pasos: primero reducción agresiva de resolución,
+  // luego calidad — permite manejar fuentes de hasta ~80 MB
   const opciones = {
-    maxWidthOrHeight: 800,
-    maxSizeMB: 0.5,
+    maxWidthOrHeight: 1200,
+    maxSizeMB: 1,
+    initialQuality: 0.7,
     useWebWorker: true,
+    fileType: 'image/jpeg',
   };
   const comprimida = await imageCompression(file, opciones);
   const storageRef = ref(storage, `combos/${comboId}/imagen.jpg`);
