@@ -26,6 +26,30 @@ export function CarritoProvider({ children }) {
     });
   }, []);
 
+  // Añade un combo completo como un único ítem con precio con descuento
+  const agregarCombo = useCallback((combo) => {
+    const itemId = `combo_${combo.id}`;
+    setItems((prev) => {
+      const existente = prev.find((i) => i.productoId === itemId);
+      if (existente) {
+        return prev.map((i) =>
+          i.productoId === itemId ? { ...i, cantidad: i.cantidad + 1 } : i
+        );
+      }
+      return [
+        ...prev,
+        {
+          productoId: itemId,
+          nombre: combo.nombre,
+          precioUnitario: combo.precioTotal,
+          imagenUrl: combo.imagenUrl || '',
+          cantidad: 1,
+          esCombo: true,
+        },
+      ];
+    });
+  }, []);
+
   const quitarItem = useCallback((productoId) => {
     setItems((prev) => prev.filter((i) => i.productoId !== productoId));
   }, []);
@@ -52,6 +76,7 @@ export function CarritoProvider({ children }) {
       value={{
         items,
         agregarItem,
+        agregarCombo,
         quitarItem,
         actualizarCantidad,
         vaciarCarrito,

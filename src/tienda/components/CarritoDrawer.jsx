@@ -102,7 +102,14 @@ export default function CarritoDrawer({ abierto, onCerrar }) {
                         }
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-800 truncate">{item.nombre}</p>
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          {item.esCombo && (
+                            <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-1.5 py-0.5 rounded-full leading-none shrink-0">
+                              Combo
+                            </span>
+                          )}
+                          <p className="text-sm font-medium text-gray-800 truncate">{item.nombre}</p>
+                        </div>
                         <p className="text-sm text-primario font-semibold">{formatPrecio(item.precioUnitario)}</p>
                       </div>
                       <div className="flex items-center gap-1.5">
