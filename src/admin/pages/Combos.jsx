@@ -39,6 +39,16 @@ export default function Combos() {
     setCombos((prev) => prev.map((c) => (c.id === id ? { ...c, activo: !valorActual } : c)));
   }
 
+  async function handleEliminar(id) {
+    if (window.confirm('¿Seguro que quieres eliminar este combo?')) {
+      const { deleteDoc } = await import('firebase/firestore');
+      await deleteDoc(doc(db, 'combos', id));
+      setModalAbierto(false);
+      setComboEditando(null);
+      cargar();
+    }
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -102,6 +112,7 @@ export default function Combos() {
           combo={comboEditando}
           onGuardar={handleGuardar}
           onCerrar={() => { setModalAbierto(false); setComboEditando(null); }}
+          onEliminar={(id) => handleEliminar(id)}
           guardando={guardando}
         />
       )}

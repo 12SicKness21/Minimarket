@@ -135,71 +135,73 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
             />
           </div>
 
-          {/* Precio · Stock */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Precio (€)</label>
-              <input
-                name="precio"
-                type="number"
-                step="0.01"
-                min="0"
-                value={form.precio}
-                onChange={handleChange}
-                required
-                placeholder="0.00"
-                className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
-              <input
-                name="stockActual"
-                type="number"
-                min="0"
-                value={form.stockActual}
-                onChange={handleChange}
-                placeholder="0"
-                className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
-              />
-            </div>
+          {/* Precio */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Precio (€)</label>
+            <input
+              name="precio"
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.precio}
+              onChange={handleChange}
+              required
+              placeholder="0.00"
+              className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            />
           </div>
 
-          {/* Categoría · Caducidad */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-              <select
-                name="categoria"
-                value={form.categoria}
-                onChange={handleChange}
-                className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
-              >
-                {categorias.map((c) => (
-                  <option key={c.id} value={c.id}>{c.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Caducidad</label>
-              <input
-                name="fechaCaducidad"
-                type="date"
-                value={form.fechaCaducidad}
-                onChange={handleChange}
-                className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
-              />
-            </div>
+          {/* Stock — comentado
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+            <input
+              name="stockActual"
+              type="number"
+              min="0"
+              value={form.stockActual}
+              onChange={handleChange}
+              placeholder="0"
+              className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            />
           </div>
+          */}
+
+          {/* Categoría */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+            <select
+              name="categoria"
+              value={form.categoria}
+              onChange={handleChange}
+              className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            >
+              {categorias.map((c) => (
+                <option key={c.id} value={c.id}>{c.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Caducidad — comentado
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Caducidad</label>
+            <input
+              name="fechaCaducidad"
+              type="date"
+              value={form.fechaCaducidad}
+              onChange={handleChange}
+              className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            />
+          </div>
+          */}
 
           {/* Países */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Países</label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
               {paises.map((p) => (
                 <label
                   key={p.id}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer transition border select-none ${
+                  className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer transition border select-none ${
                     form.paises.includes(p.id)
                       ? 'border-primario bg-green-50 text-primario font-medium'
                       : 'border-gray-200 text-gray-600 hover:border-gray-300'
@@ -267,7 +269,7 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
             <button
               type="button"
               onClick={() => onEliminar(producto.id)}
-              className="p-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-full transition"
+              className="p-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl transition shadow-sm"
               title="Eliminar producto"
             >
               🗑️

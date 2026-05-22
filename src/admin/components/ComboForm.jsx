@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { obtenerTodosProductos } from '../../firebase/productos';
 import { formatPrecio } from '../../shared/utils/formatters';
 
-export default function ComboForm({ combo, onGuardar, onCerrar, guardando }) {
+export default function ComboForm({ combo, onGuardar, onCerrar, onEliminar, guardando }) {
   const [form, setForm] = useState({
     nombre: '',
     activo: true,
@@ -249,20 +249,30 @@ export default function ComboForm({ combo, onGuardar, onCerrar, guardando }) {
             <span className="text-sm font-medium text-gray-700">Activo</span>
           </label>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <button
-              type="submit"
-              disabled={guardando}
-              className="flex-1 bg-primario hover:bg-green-700 text-white font-bold py-2.5 rounded-full transition disabled:opacity-50"
-            >
-              {guardando ? 'Guardando...' : 'Guardar'}
-            </button>
+          <div className="flex gap-2 pt-2">
+            {combo && onEliminar && (
+              <button
+                type="button"
+                onClick={() => onEliminar(combo.id)}
+                className="p-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl transition shadow-sm"
+                title="Eliminar combo"
+              >
+                🗑️
+              </button>
+            )}
             <button
               type="button"
               onClick={onCerrar}
-              className="sm:px-6 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition"
+              className="flex-1 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition text-sm"
             >
               Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={guardando}
+              className="flex-1 bg-primario hover:bg-green-700 text-white font-bold py-2.5 rounded-full transition disabled:opacity-50 text-sm"
+            >
+              {guardando ? 'Guardando…' : combo ? 'Guardar cambios' : 'Crear combo'}
             </button>
           </div>
         </form>

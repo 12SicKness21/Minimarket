@@ -3,7 +3,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 
 const NAV_ITEMS = [
-  { path: '/admin', label: 'Dashboard', icon: '📊' },
+  // { path: '/admin', label: 'Dashboard', icon: '📊' }, // Dashboard desactivado
   { path: '/admin/productos', label: 'Productos', icon: '📦' },
   { path: '/admin/combos', label: 'Combos', icon: '🛍️' },
   { path: '/admin/catalogos', label: 'Catálogos', icon: '🏷️' },
@@ -24,8 +24,9 @@ export default function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
         <div className="p-4 border-b">
-          <Link to="/admin" className="font-display font-extrabold text-xl text-primario">
-            🛒 Minimarket
+          <Link to="/admin/productos" className="flex items-center gap-2 font-display font-extrabold text-xl text-primario">
+            <img src="/icon.png" alt="Minimarket" className="w-8 h-8 object-contain" />
+            Minimarket
           </Link>
           <p className="text-xs text-gray-400 mt-1">Panel de administración</p>
         </div>
@@ -62,7 +63,10 @@ export default function AdminLayout({ children }) {
       {/* Mobile header */}
       <div className="flex-1 flex flex-col">
         <header className="md:hidden bg-white border-b px-4 py-3 flex items-center gap-3 flex-wrap">
-          <span className="font-display font-bold text-primario whitespace-nowrap">🛒 Admin</span>
+          <Link to="/admin/productos" className="flex items-center gap-1.5 font-display font-bold text-primario whitespace-nowrap">
+            <img src="/icon.png" alt="" className="w-6 h-6 object-contain" />
+            Admin
+          </Link>
           <div className="flex items-center gap-1 flex-wrap">
             {NAV_ITEMS.map((item) => (
               <Link

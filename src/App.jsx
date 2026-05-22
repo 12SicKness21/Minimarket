@@ -76,11 +76,12 @@ export default function App() {
 
           {/* Admin */}
           <Route path="/admin/login" element={
-            usuario ? <Navigate to="/admin" replace /> : <Login />
+            usuario ? <Navigate to="/admin/productos" replace /> : <Login />
           } />
+          {/* Dashboard desactivado — redirige directo a Productos */}
           <Route path="/admin" element={
             <RutaProtegida usuario={usuario}>
-              <AdminLayout><Dashboard /></AdminLayout>
+              <Navigate to="/admin/productos" replace />
             </RutaProtegida>
           } />
           <Route path="/admin/productos" element={
