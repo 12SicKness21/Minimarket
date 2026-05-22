@@ -69,10 +69,11 @@ export default function Combos() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {combos.map((combo) => (
             <div key={combo.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-              <div className="aspect-video bg-gradient-to-br from-green-400 to-primario flex items-center justify-center p-6 text-center">
-                <span className="font-display font-black text-3xl md:text-4xl text-white drop-shadow-lg leading-tight tracking-wide">
-                  {combo.nombre}
-                </span>
+              <div className="aspect-video bg-gradient-to-br from-green-400 to-primario flex items-center justify-center p-6 text-center overflow-hidden">
+                {combo.imagenUrl
+                  ? <img src={combo.imagenUrl} alt={combo.nombre} className="w-full h-full object-cover" />
+                  : <span className="font-display font-black text-3xl md:text-4xl text-white drop-shadow-lg leading-tight tracking-wide">{combo.nombre}</span>
+                }
               </div>
               <div className="p-4">
                 <h3 className="font-display font-bold text-lg text-gray-800">{combo.nombre}</h3>

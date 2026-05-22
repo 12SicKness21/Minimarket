@@ -1,15 +1,74 @@
+import { useState } from 'react';
 import { useCatalogos } from '../../shared/hooks/useCatalogos';
+import {
+  contarProductosConCategoria,
+  contarProductosConPais,
+  slugify,
+} from '../../firebase/catalogos';
 
 export default function Catalogos() {
-  const { categorias, paises } = useCatalogos();
+  const { categorias, paises, actualizarCategorias, actualizarPaises } = useCatalogos();
+
+  // ── Categorías ──
+  const [nuevaCat, setNuevaCat] = useState('');
+  const [guardandoCat, setGuardandoCat] = useState(false);
+
+  async function agregarCategoria() {
+    if (!nuevaCat.trim()) return;
+    const id = slugify(nuevaCat);
+    if (categorias.find((c) => c.id === id)) return alert('Ya existe una categoría con ese nombre.');
+    setGuardandoCat(true);
+    await actualizarCategorias([...categorias, { id, label: nuevaCat.trim() }]);
+    setNuevaCat('');
+    setGuardandoCat(false);
+  }
+
+  async function eliminarCategoria(cat) {
+    const count = await contarProductosConCategoria(cat.id);
+    if (count > 0) {
+      const ok = window.confirm(
+        `⚠️ La categoría "${cat.label}" tiene ${count} producto${count > 1 ? 's' : ''} asignado${count > 1 ? 's' : ''}.\n\nSi la eliminas, esos productos conservarán el valor pero no aparecerá en los filtros ni en el formulario.\n\n¿Deseas continuar?`
+      );
+      if (!ok) return;
+    }
+    await actualizarCategorias(categorias.filter((c) => c.id !== cat.id));
+  }
+
+  // ── Países ──
+  const [nuevoPaisNombre, setNuevoPaisNombre] = useState('');
+  const [nuevoPaisBandera, setNuevoPaisBandera] = useState('');
+  const [guardandoPais, setGuardandoPais] = useState(false);
+
+  async function agregarPais() {
+    if (!nuevoPaisNombre.trim()) return;
+    const id = slugify(nuevoPaisNombre);
+    if (paises.find((p) => p.id === id)) return alert('Ya existe un país con ese nombre.');
+    setGuardandoPais(true);
+    await actualizarPaises([...paises, { id, nombre: nuevoPaisNombre.trim(), bandera: nuevoPaisBandera.trim() }]);
+    setNuevoPaisNombre('');
+    setNuevoPaisBandera('');
+    setGuardandoPais(false);
+  }
+
+  async function eliminarPais(pais) {
+    const count = await contarProductosConPais(pais.id);
+    if (count > 0) {
+      const ok = window.confirm(
+        `⚠️ El país "${pais.nombre}" tiene ${count} producto${count > 1 ? 's' : ''} asignado${count > 1 ? 's' : ''}.\n\nSi lo eliminas, esos productos lo conservarán pero no aparecerá en los filtros ni en el formulario.\n\n¿Deseas continuar?`
+      );
+      if (!ok) return;
+    }
+    await actualizarPaises(paises.filter((p) => p.id !== pais.id));
+  }
 
   return (
     <div className="max-w-2xl space-y-8">
       <h1 className="font-display font-bold text-2xl text-gray-800">Catálogos</h1>
 
       {/* ── CATEGORÍAS ── */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3">
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
         <h2 className="font-display font-bold text-lg text-gray-800">Categorías</h2>
+
         <div className="space-y-2">
           {categorias.map((cat) => (
             <div key={cat.id} className="flex items-center gap-2">
@@ -17,17 +76,39 @@ export default function Catalogos() {
                 {cat.label}
                 <span className="text-xs text-gray-400 ml-2 font-normal">#{cat.id}</span>
               </span>
+              <button
+                onClick={() => eliminarCategoria(cat)}
+                className="p-1.5 text-red-400 hover:text-red-600 transition"
+                title="Eliminar"
+              >
+                🗑️
+              </button>
             </div>
           ))}
-          {categorias.length === 0 && (
-            <p className="text-sm text-gray-400">No hay categorías registradas.</p>
-          )}
+        </div>
+
+        <div className="flex gap-2 pt-2 border-t border-gray-100">
+          <input
+            value={nuevaCat}
+            onChange={(e) => setNuevaCat(e.target.value)}
+            placeholder="Nueva categoría..."
+            className="flex-1 px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            onKeyDown={(e) => e.key === 'Enter' && agregarCategoria()}
+          />
+          <button
+            onClick={agregarCategoria}
+            disabled={!nuevaCat.trim() || guardandoCat}
+            className="bg-primario hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-full text-sm transition disabled:opacity-40"
+          >
+            {guardandoCat ? '...' : '+ Añadir'}
+          </button>
         </div>
       </div>
 
       {/* ── PAÍSES ── */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3">
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
         <h2 className="font-display font-bold text-lg text-gray-800">Países</h2>
+
         <div className="space-y-2">
           {paises.map((pais) => (
             <div key={pais.id} className="flex items-center gap-2">
@@ -36,16 +117,43 @@ export default function Catalogos() {
                 {pais.nombre}
                 <span className="text-xs text-gray-400 font-normal">#{pais.id}</span>
               </span>
+              <button
+                onClick={() => eliminarPais(pais)}
+                className="p-1.5 text-red-400 hover:text-red-600 transition"
+                title="Eliminar"
+              >
+                🗑️
+              </button>
             </div>
           ))}
-          {paises.length === 0 && (
-            <p className="text-sm text-gray-400">No hay países registrados.</p>
-          )}
+        </div>
+
+        <div className="flex gap-2 pt-2 border-t border-gray-100">
+          <input
+            value={nuevoPaisBandera}
+            onChange={(e) => setNuevoPaisBandera(e.target.value)}
+            placeholder="🏳️"
+            className="w-16 px-2 py-2 border rounded-xl text-sm text-center focus:outline-none focus:ring-2 focus:ring-primario/30"
+          />
+          <input
+            value={nuevoPaisNombre}
+            onChange={(e) => setNuevoPaisNombre(e.target.value)}
+            placeholder="Nombre del país..."
+            className="flex-1 px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            onKeyDown={(e) => e.key === 'Enter' && agregarPais()}
+          />
+          <button
+            onClick={agregarPais}
+            disabled={!nuevoPaisNombre.trim() || guardandoPais}
+            className="bg-primario hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-full text-sm transition disabled:opacity-40"
+          >
+            {guardandoPais ? '...' : '+ Añadir'}
+          </button>
         </div>
       </div>
 
       <p className="text-xs text-gray-400 px-1">
-        ℹ️ Los catálogos son de solo lectura. Contacta al desarrollador para hacer cambios.
+        ℹ️ El ID (#id) se genera automáticamente al crear y no puede cambiarse para no romper productos existentes.
       </p>
     </div>
   );

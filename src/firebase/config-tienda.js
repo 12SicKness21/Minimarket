@@ -1,5 +1,7 @@
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from './config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import imageCompression from 'browser-image-compression';
+import { db, storage } from './config';
 
 const DOC_REF = doc(db, 'configuracion', 'tienda');
 
@@ -17,6 +19,16 @@ export const DEFAULTS = {
   emailAlertas: '',
   mensajePersonalizado: '',
   mensajePersonalizadoExpira: null, // ISO string o null
+  redes: {
+    instagram: { activo: false, url: '' },
+    tiktok:    { activo: false, url: '' },
+    facebook:  { activo: false, url: '' },
+  },
+  ubicacion: {
+    imagenUrl: '',
+    direccion: '',
+    url: '',
+  },
 };
 
 export async function obtenerConfigTienda() {
@@ -34,6 +46,27 @@ export async function guardarMensajePersonalizado(mensaje, expiraISO) {
     mensajePersonalizado: mensaje,
     mensajePersonalizadoExpira: expiraISO || null,
   });
+}
+
+export async function guardarRedes(redes) {
+  await updateDoc(DOC_REF, { redes });
+}
+
+export async function guardarUbicacion(imagenFile, datos) {
+  let imagenUrl = datos.imagenUrl || '';
+  if (imagenFile) {
+    const comp = await imageCompression(imagenFile, {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1200,
+      useWebWorker: true,
+    });
+    const storageRef = ref(storage, 'configuracion/mapa');
+    await uploadBytes(storageRef, comp);
+    imagenUrl = await getDownloadURL(storageRef);
+  }
+  const ubicacion = { ...datos, imagenUrl };
+  await updateDoc(DOC_REF, { ubicacion });
+  return imagenUrl;
 }
 
 export async function resetMensajePersonalizado() {

@@ -4,6 +4,8 @@ import {
   guardarConfigTienda,
   guardarMensajePersonalizado,
   resetMensajePersonalizado,
+  guardarRedes,
+  guardarUbicacion,
   estaDentroDeHorario,
 } from '../../firebase/config-tienda';
 
@@ -28,12 +30,30 @@ export default function Configuracion() {
   const [guardandoMsg, setGuardandoMsg] = useState(false);
   const [msgGuardado, setMsgGuardado] = useState(false);
 
+  // Redes sociales
+  const REDES_DEFAULT = { instagram: { activo: false, url: '' }, tiktok: { activo: false, url: '' }, facebook: { activo: false, url: '' } };
+  const [redes, setRedes] = useState(REDES_DEFAULT);
+  const [guardandoRedes, setGuardandoRedes] = useState(false);
+  const [redesGuardadas, setRedesGuardadas] = useState(false);
+
+  // Ubicación
+  const [ubicacion, setUbicacion] = useState({ imagenUrl: '', direccion: '', url: '' });
+  const [mapaFile, setMapaFile] = useState(null);
+  const [mapaPreview, setMapaPreview] = useState('');
+  const [guardandoUbicacion, setGuardandoUbicacion] = useState(false);
+  const [ubicacionGuardada, setUbicacionGuardada] = useState(false);
+
   // Preview horario
   const [preview, setPreview] = useState(null);
 
   useEffect(() => {
     obtenerConfigTienda().then((cfg) => {
       setForm(cfg);
+      if (cfg.redes) setRedes(cfg.redes);
+      if (cfg.ubicacion) {
+        setUbicacion(cfg.ubicacion);
+        setMapaPreview(cfg.ubicacion.imagenUrl || '');
+      }
       setMensajeTemporal(cfg.mensajePersonalizado || '');
       setExpiraTemporal(cfg.mensajePersonalizadoExpira
         ? new Date(cfg.mensajePersonalizadoExpira).toISOString().slice(0, 16)
@@ -83,6 +103,32 @@ export default function Configuracion() {
     setGuardandoMsg(false);
     setMsgGuardado(true);
     setTimeout(() => setMsgGuardado(false), 3000);
+  }
+
+  async function handleGuardarRedes() {
+    setGuardandoRedes(true);
+    await guardarRedes(redes);
+    setGuardandoRedes(false);
+    setRedesGuardadas(true);
+    setTimeout(() => setRedesGuardadas(false), 3000);
+  }
+
+  function handleMapaFile(e) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setMapaFile(file);
+      setMapaPreview(URL.createObjectURL(file));
+    }
+  }
+
+  async function handleGuardarUbicacion() {
+    setGuardandoUbicacion(true);
+    const imagenUrl = await guardarUbicacion(mapaFile, ubicacion);
+    setUbicacion((u) => ({ ...u, imagenUrl }));
+    setMapaFile(null);
+    setGuardandoUbicacion(false);
+    setUbicacionGuardada(true);
+    setTimeout(() => setUbicacionGuardada(false), 3000);
   }
 
   async function handleResetMensaje() {
@@ -348,6 +394,110 @@ export default function Configuracion() {
           </div>
         )}
       </div>
+      {/* ── Redes Sociales ── */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
+        <h2 className="font-semibold text-gray-800">Redes sociales</h2>
+
+        {[
+          { key: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/tutienda' },
+          { key: 'tiktok',    label: 'TikTok',    placeholder: 'https://tiktok.com/@tutienda'  },
+          { key: 'facebook',  label: 'Facebook',  placeholder: 'https://facebook.com/tutienda' },
+        ].map(({ key, label, placeholder }) => (
+          <div key={key} className="flex items-center gap-3">
+            {/* Toggle */}
+            <button
+              type="button"
+              onClick={() => setRedes((r) => ({ ...r, [key]: { ...r[key], activo: !r[key].activo } }))}
+              className={`relative shrink-0 w-10 h-6 rounded-full transition-colors ${redes[key].activo ? 'bg-primario' : 'bg-gray-200'}`}
+            >
+              <span className={`block w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm ${redes[key].activo ? 'left-5' : 'left-1'}`} />
+            </button>
+            <div className="flex-1">
+              <label className="text-xs text-gray-500 font-medium block mb-0.5">{label}</label>
+              <input
+                type="url"
+                value={redes[key].url}
+                onChange={(e) => setRedes((r) => ({ ...r, [key]: { ...r[key], url: e.target.value } }))}
+                placeholder={placeholder}
+                disabled={!redes[key].activo}
+                className="w-full px-3 py-1.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario disabled:bg-gray-50 disabled:text-gray-300"
+              />
+            </div>
+          </div>
+        ))}
+
+        <div className="flex items-center gap-3 pt-1">
+          <button
+            type="button"
+            onClick={handleGuardarRedes}
+            disabled={guardandoRedes}
+            className="bg-primario hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-full transition disabled:opacity-50 text-sm"
+          >
+            {guardandoRedes ? 'Guardando...' : 'Guardar redes'}
+          </button>
+          {redesGuardadas && <span className="text-sm text-green-600 font-medium">✓ Guardado</span>}
+        </div>
+      </div>
+
+      {/* ── Ubicación ── */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
+        <h2 className="font-semibold text-gray-800">Ubicación</h2>
+
+        {/* Imagen del mapa */}
+        <div>
+          <label className="text-xs text-gray-500 font-medium block mb-2">Imagen del mapa (captura de Google Maps)</label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <div className="w-24 h-24 shrink-0 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden hover:border-primario transition">
+              {mapaPreview
+                ? <img src={mapaPreview} alt="Mapa" className="w-full h-full object-cover" />
+                : <span className="text-2xl">🗺️</span>
+              }
+            </div>
+            <div className="text-sm text-gray-500">
+              <span className="text-primario font-medium">Toca para subir</span> la captura del mapa
+              <p className="text-xs text-gray-400 mt-0.5">JPG o PNG · máx. 5 MB</p>
+            </div>
+            <input type="file" accept="image/*" onChange={handleMapaFile} className="sr-only" />
+          </label>
+        </div>
+
+        {/* Dirección */}
+        <div>
+          <label className="text-xs text-gray-500 font-medium block mb-1">Dirección de la tienda</label>
+          <input
+            type="text"
+            value={ubicacion.direccion}
+            onChange={(e) => setUbicacion((u) => ({ ...u, direccion: e.target.value }))}
+            placeholder="Ej: Calle Mayor 12, 28001 Madrid"
+            className="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+          />
+        </div>
+
+        {/* URL de Google Maps */}
+        <div>
+          <label className="text-xs text-gray-500 font-medium block mb-1">URL de Google Maps (botón "Cómo llegar")</label>
+          <input
+            type="url"
+            value={ubicacion.url}
+            onChange={(e) => setUbicacion((u) => ({ ...u, url: e.target.value }))}
+            placeholder="https://maps.google.com/?q=..."
+            className="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+          />
+        </div>
+
+        <div className="flex items-center gap-3 pt-1">
+          <button
+            type="button"
+            onClick={handleGuardarUbicacion}
+            disabled={guardandoUbicacion}
+            className="bg-primario hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-full transition disabled:opacity-50 text-sm"
+          >
+            {guardandoUbicacion ? 'Guardando...' : 'Guardar ubicación'}
+          </button>
+          {ubicacionGuardada && <span className="text-sm text-green-600 font-medium">✓ Guardado</span>}
+        </div>
+      </div>
+
     </div>
   );
 }

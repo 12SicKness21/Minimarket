@@ -7,6 +7,7 @@ import FiltroPaises from '../components/FiltroPaises';
 import FiltroCategoria from '../components/FiltroCategoria';
 import ProductoCard from '../components/ProductoCard';
 import HeroBanderas from '../components/HeroBanderas';
+import SeccionContacto from '../components/SeccionContacto';
 
 export default function Home() {
   const [todosProductos, setTodosProductos] = useState([]);
@@ -139,6 +140,8 @@ export default function Home() {
             </div>
           )}
         </section>
+
+        <SeccionContacto />
       </div>
     </>
   );
