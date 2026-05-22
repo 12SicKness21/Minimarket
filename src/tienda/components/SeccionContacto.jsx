@@ -96,10 +96,9 @@ export default function SeccionContacto() {
                 href={ubicacion.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-primario hover:bg-green-700 text-white font-bold py-2.5 rounded-full text-sm transition active:scale-95"
+                className="flex items-center justify-center w-full bg-primario hover:bg-green-700 text-white font-bold py-2.5 rounded-full text-sm transition active:scale-95"
               >
-                <span>🗺️</span>
-                Cómo llegar
+                CÓMO LLEGAR
               </a>
             )}
           </div>

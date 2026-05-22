@@ -4,11 +4,8 @@ export default function FiltroPaises({ seleccionados, onChange }) {
   const { paises } = useCatalogos();
 
   function togglePais(paisId) {
-    if (seleccionados.includes(paisId)) {
-      onChange(seleccionados.filter((p) => p !== paisId));
-    } else {
-      onChange([...seleccionados, paisId]);
-    }
+    // Selección única: clic en activo → deselecciona; clic en otro → reemplaza
+    onChange(seleccionados.includes(paisId) ? [] : [paisId]);
   }
 
   return (

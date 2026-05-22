@@ -475,7 +475,7 @@ export default function Configuracion() {
 
         {/* URL de Google Maps */}
         <div>
-          <label className="text-xs text-gray-500 font-medium block mb-1">URL de Google Maps (botón "Cómo llegar")</label>
+          <label className="text-xs text-gray-500 font-medium block mb-1">URL de Google Maps</label>
           <input
             type="url"
             value={ubicacion.url}
