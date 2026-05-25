@@ -120,7 +120,11 @@ export default function App() {
         </Routes>
       </Suspense>
 
-      {!esAdmin && <Footer />}
+      {!esAdmin && (
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <Footer />
+        </div>
+      )}
     </>
   );
 }
