@@ -4,6 +4,7 @@ import { useCarrito } from '../hooks/useCarrito';
 import { obtenerCatalogos } from '../../firebase/catalogos';
 import { obtenerConfigTienda } from '../../firebase/config-tienda';
 import GaleriaLocal from '../../tienda/components/GaleriaLocal';
+import HistorialPedidos from '../../tienda/components/HistorialPedidos';
 
 function generarLinkWhatsApp(numero) {
   const limpio = (numero || '').replace(/\D/g, '');
@@ -17,6 +18,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [seccionActiva, setSeccionActiva] = useState(null);
   const [galeriaAbierta, setGaleriaAbierta] = useState(false);
+  const [historialAbierto, setHistorialAbierto] = useState(false);
   const [catalogos, setCatalogos] = useState(null);
   const [config, setConfig] = useState(null);
   const inputRef = useRef(null);
@@ -357,10 +359,26 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
             </button>
           </div>
 
+          {/* ── Historial de pedidos ── */}
+          <div className="border-b border-gray-100">
+            <button
+              onClick={() => { cerrarMenu(); setHistorialAbierto(true); }}
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+            >
+              <span className="flex items-center gap-2">
+                Historial de pedidos
+              </span>
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
         </div>
       </div>
 
       {galeriaAbierta && <GaleriaLocal onCerrar={() => setGaleriaAbierta(false)} />}
+      {historialAbierto && <HistorialPedidos onCerrar={() => setHistorialAbierto(false)} />}
     </>
   );
 }
