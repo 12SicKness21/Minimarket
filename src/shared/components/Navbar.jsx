@@ -3,11 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useCarrito } from '../hooks/useCarrito';
 import { obtenerCatalogos } from '../../firebase/catalogos';
 import { obtenerConfigTienda } from '../../firebase/config-tienda';
-
-// Imágenes de la carpeta /local (agregar aquí si se añaden más)
-const IMAGENES_LOCAL = [
-  '/local/tienda.avif',
-];
+import GaleriaLocal from '../../tienda/components/GaleriaLocal';
 
 function generarLinkWhatsApp(numero) {
   const limpio = (numero || '').replace(/\D/g, '');
@@ -20,6 +16,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
   const [buscadorAbierto, setBuscadorAbierto] = useState(false);
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [seccionActiva, setSeccionActiva] = useState(null);
+  const [galeriaAbierta, setGaleriaAbierta] = useState(false);
   const [catalogos, setCatalogos] = useState(null);
   const [config, setConfig] = useState(null);
   const inputRef = useRef(null);
@@ -350,32 +347,20 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           {/* ── Imágenes nuestras ── */}
           <div className="border-b border-gray-100">
             <button
-              onClick={() => toggleSeccion('imagenes')}
+              onClick={() => { cerrarMenu(); setGaleriaAbierta(true); }}
               className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
             >
               Imágenes nuestras
-              <svg className={`w-4 h-4 text-gray-400 transition-transform ${seccionActiva === 'imagenes' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
-            {seccionActiva === 'imagenes' && (
-              <div className="px-4 pb-4">
-                <div className="grid grid-cols-2 gap-2">
-                  {IMAGENES_LOCAL.map((src) => (
-                    <img
-                      key={src}
-                      src={src}
-                      alt="Local"
-                      className="w-full aspect-square object-cover rounded-xl"
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
         </div>
       </div>
+
+      {galeriaAbierta && <GaleriaLocal onCerrar={() => setGaleriaAbierta(false)} />}
     </>
   );
 }

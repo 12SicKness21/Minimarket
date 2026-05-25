@@ -11,6 +11,7 @@ import BotonWhatsApp from './shared/components/BotonWhatsApp';
 import CarritoDrawer from './tienda/components/CarritoDrawer';
 import ToastCarrito from './shared/components/ToastCarrito';
 import BannerCerrado from './tienda/components/BannerCerrado';
+import Footer from './tienda/components/Footer';
 
 // Admin (lazy - solo se descarga al entrar a /admin)
 const Login = lazy(() => import('./admin/pages/Login'));
@@ -68,6 +69,7 @@ export default function App() {
 
       <Suspense fallback={<Cargando />}>
         <Routes>
+
           {/* Tienda */}
           <Route path="/" element={
             <Home
@@ -117,6 +119,8 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
+
+      {!esAdmin && <Footer />}
     </>
   );
 }
