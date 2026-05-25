@@ -8,17 +8,11 @@ export default function SeccionSobreNosotros() {
         backgroundPosition: 'center',
       }}
     >
-      {/* Overlay para legibilidad del texto */}
-      <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px]" />
       <div className="relative z-10 max-w-xl mx-auto text-center">
 
-        <p className="text-xl font-black uppercase tracking-widest text-red-600 mb-3" style={{ fontStretch: 'expanded', letterSpacing: '0.2em' }}>
+        <p className="text-xl font-black uppercase tracking-widest text-red-600 mb-3" style={{ letterSpacing: '0.2em' }}>
           Sobre nosotros
         </p>
-
-        <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-800 leading-snug mb-5">
-          Pasión por la gastronomía latina
-        </h2>
 
         <div className="flex items-center justify-center gap-3 mb-5">
           <div className="h-px flex-1 bg-gray-200" />
