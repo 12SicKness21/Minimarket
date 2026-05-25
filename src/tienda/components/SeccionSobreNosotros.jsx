@@ -13,7 +13,7 @@ export default function SeccionSobreNosotros() {
         style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.6)' }}
       >
 
-        <p className="text-xl font-black uppercase tracking-widest mb-2" style={{ letterSpacing: '0.2em' }}>
+        <p className="text-xl font-black uppercase tracking-widest mb-2" style={{ letterSpacing: '0.2em', color: '#FFD700' }}>
           Sobre nosotros
         </p>
 
@@ -35,8 +35,8 @@ export default function SeccionSobreNosotros() {
           variedad, frescura y novedades constantes con la seriedad que te mereces.
         </p>
 
-        <p className="text-primario text-sm sm:text-base mt-5 italic font-semibold">
-          ¡Te llevamos el sabor de casa a tu mesa!
+        <p className="text-sm sm:text-base mt-5 italic font-semibold" style={{ color: '#FFD700' }}>
+          Tus marcas de siempre, más cerca de tu hogar.
         </p>
 
       </div>
