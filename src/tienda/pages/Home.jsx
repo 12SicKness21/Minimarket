@@ -10,11 +10,9 @@ import HeroBanderas from '../components/HeroBanderas';
 import SeccionContacto from '../components/SeccionContacto';
 import SeccionSobreNosotros from '../components/SeccionSobreNosotros';
 
-export default function Home() {
+export default function Home({ categoria = '', setCategoria = () => {}, paisesSeleccionados = [], setPaisesSeleccionados = () => {} }) {
   const [todosProductos, setTodosProductos] = useState([]);
   const [combos, setCombos] = useState([]);
-  const [paisesSeleccionados, setPaisesSeleccionados] = useState([]);
-  const [categoria, setCategoria] = useState('');
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
@@ -82,7 +80,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section>
+        <section id="productos">
           <div className="flex items-baseline justify-between mb-4">
             <h2 className="font-display font-bold text-xl text-gray-800">
               {hayFiltrosActivos ? 'Resultados' : 'Todos los productos'}

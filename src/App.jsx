@@ -32,34 +32,33 @@ function Cargando() {
 }
 
 function RutaProtegida({ usuario, children }) {
-  if (usuario === undefined) {
-    return <Cargando />;
-  }
-  if (!usuario) {
-    return <Navigate to="/admin/login" replace />;
-  }
+  if (usuario === undefined) return <Cargando />;
+  if (!usuario) return <Navigate to="/admin/login" replace />;
   return children;
 }
 
 export default function App() {
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [usuario, setUsuario] = useState(undefined);
+  const [categoria, setCategoria] = useState('');
+  const [paisesSeleccionados, setPaisesSeleccionados] = useState([]);
   const location = useLocation();
   const esAdmin = location.pathname.startsWith('/admin');
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      setUsuario(user);
-    });
+    const unsub = onAuthStateChanged(auth, (user) => setUsuario(user));
     return () => unsub();
   }, []);
 
   return (
     <>
-      {/* Tienda routes */}
       {!esAdmin && (
         <>
-          <Navbar onAbrirCarrito={() => setCarritoAbierto(true)} />
+          <Navbar
+            onAbrirCarrito={() => setCarritoAbierto(true)}
+            onSelectCategoria={(cat) => { setCategoria(cat); setPaisesSeleccionados([]); }}
+            onSelectPais={(pais) => { setPaisesSeleccionados(pais ? [pais] : []); setCategoria(''); }}
+          />
           <BannerCerrado />
           <CarritoDrawer abierto={carritoAbierto} onCerrar={() => setCarritoAbierto(false)} />
           <ToastCarrito />
@@ -70,15 +69,20 @@ export default function App() {
       <Suspense fallback={<Cargando />}>
         <Routes>
           {/* Tienda */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={
+            <Home
+              categoria={categoria}
+              setCategoria={setCategoria}
+              paisesSeleccionados={paisesSeleccionados}
+              setPaisesSeleccionados={setPaisesSeleccionados}
+            />
+          } />
           <Route path="/catalogo" element={<Catalogo />} />
-
 
           {/* Admin */}
           <Route path="/admin/login" element={
             usuario ? <Navigate to="/admin/productos" replace /> : <Login />
           } />
-          {/* Dashboard desactivado — redirige directo a Productos */}
           <Route path="/admin" element={
             <RutaProtegida usuario={usuario}>
               <Navigate to="/admin/productos" replace />
@@ -110,7 +114,6 @@ export default function App() {
             </RutaProtegida>
           } />
 
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
