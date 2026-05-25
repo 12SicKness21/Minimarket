@@ -39,11 +39,11 @@ export default function Home({ categoria = '', setCategoria = () => {}, paisesSe
 
   const recienLlegados = todosProductos.filter((p) => p.recienLlegado);
 
-  const [visible, setVisible] = useState(24);
+  const [visible, setVisible] = useState(14);
   const productosPagina = productosFiltrados.slice(0, visible);
   const quedanMas = productosFiltrados.length > visible;
 
-  useEffect(() => { setVisible(24); }, [paisesSeleccionados, categoria]);
+  useEffect(() => { setVisible(14); }, [paisesSeleccionados, categoria]);
 
   const hayFiltrosActivos = paisesSeleccionados.length > 0 || categoria !== '';
 
@@ -131,7 +131,7 @@ export default function Home({ categoria = '', setCategoria = () => {}, paisesSe
           {quedanMas && !cargando && (
             <div className="text-center mt-8">
               <button
-                onClick={() => setVisible((v) => v + 24)}
+                onClick={() => setVisible((v) => v + 14)}
                 className="bg-white border border-gray-200 text-gray-700 font-medium px-6 py-2.5 rounded-full hover:bg-gray-50 transition"
               >
                 Ver más productos
