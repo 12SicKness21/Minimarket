@@ -13,6 +13,16 @@ export default function SeccionSobreNosotros() {
         style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.6)' }}
       >
 
+        <p className="text-xl font-black uppercase tracking-widest mb-2" style={{ letterSpacing: '0.2em' }}>
+          Sobre nosotros
+        </p>
+
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="h-px flex-1 bg-white/60" />
+          <span className="text-lg">🌎</span>
+          <div className="h-px flex-1 bg-white/60" />
+        </div>
+
         <p className="text-base sm:text-lg leading-loose font-semibold">
           Nacimos en Madrid con una misión clara: mantener viva la riqueza culinaria de América Latina.
           Sabemos que la comida es identidad, cultura y un punto de encuentro. Por eso, te acercamos
@@ -25,7 +35,7 @@ export default function SeccionSobreNosotros() {
           variedad, frescura y novedades constantes con la seriedad que te mereces.
         </p>
 
-        <p className="text-sm sm:text-base mt-5 italic font-semibold">
+        <p className="text-primario text-sm sm:text-base mt-5 italic font-semibold">
           ¡Te llevamos el sabor de casa a tu mesa!
         </p>
 
