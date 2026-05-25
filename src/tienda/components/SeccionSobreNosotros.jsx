@@ -1,6 +1,7 @@
 export default function SeccionSobreNosotros() {
   return (
     <section
+      id="sobre-nosotros"
       className="mt-12 mb-6 px-6 py-10 rounded-3xl overflow-hidden relative"
       style={{
         backgroundImage: 'url(/fondo_nosotros.avif)',

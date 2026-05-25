@@ -131,7 +131,7 @@ export default function Footer() {
               </button>
             </li>
             <li>
-              <button onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })} className="hover:text-white transition text-left">
+              <button onClick={() => scrollA('#sobre-nosotros')} className="hover:text-white transition text-left">
                 Sobre nosotros
               </button>
             </li>

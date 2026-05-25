@@ -47,7 +47,7 @@ export default function SeccionContacto() {
   if (redesActivas.length === 0 && !tieneUbicacion) return null;
 
   return (
-    <section className="mt-10 mb-6 space-y-6">
+    <section id="contacto" className="mt-10 mb-6 space-y-6">
 
       {/* Redes sociales */}
       {redesActivas.length > 0 && (
