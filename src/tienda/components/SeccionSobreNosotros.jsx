@@ -9,8 +9,8 @@ export default function SeccionSobreNosotros() {
       }}
     >
       <div
-        className="relative z-10 max-w-xl mx-auto text-center"
-        style={{ mixBlendMode: 'difference', color: 'white' }}
+        className="relative z-10 max-w-xl mx-auto text-center text-white"
+        style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.6)' }}
       >
 
         <p className="text-base sm:text-lg leading-loose font-semibold">
