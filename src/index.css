@@ -32,6 +32,36 @@ body {
   animation: bounce-in 0.3s ease-out forwards;
 }
 
+/* Sobre Nosotros — fondo que cicla colores de banderas latinas */
+@keyframes flags-bg {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-flags-bg {
+  background: linear-gradient(270deg,
+    #CF0A2C, #00247D, #CF8B00,   /* Venezuela  */
+    #006847, #CE1126,             /* México     */
+    #FCD116, #003087,             /* Colombia   */
+    #74ACDF, #F6B40E,             /* Argentina  */
+    #D91023,                      /* Perú       */
+    #034EA2, #FFD100, #EF3340,   /* Ecuador    */
+    #D52B1E, #003082              /* Chile      */
+  );
+  background-size: 400% 400%;
+  animation: flags-bg 18s ease infinite;
+}
+
+/* Ticker horizontal de emojis banderas */
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-ticker {
+  animation: ticker 20s linear infinite;
+  will-change: transform;
+}
+
 /* Auto-scroll marquee para carruseles */
 @keyframes marquee {
   0%   { transform: translateX(0); }
