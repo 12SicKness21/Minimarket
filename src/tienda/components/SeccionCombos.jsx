@@ -66,10 +66,14 @@ export default function SeccionCombos({ combos = [] }) {
   return (
     <section className="mb-8">
       <div
-        className="relative w-full rounded-3xl overflow-hidden"
+        className="relative overflow-hidden"
         style={{
           background: 'linear-gradient(140deg, #0d3320 0%, #145c38 60%, #1a7a4a 100%)',
           minHeight: 300,
+          width: '100vw',
+          position: 'relative',
+          left: '50%',
+          transform: 'translateX(-50%)',
         }}
       >
         {/* Contenido del slide */}
@@ -78,7 +82,7 @@ export default function SeccionCombos({ combos = [] }) {
           style={{ opacity: fadeIn ? 1 : 0 }}
         >
           {/* Imagen — mitad izquierda */}
-          <div className="w-[45%] relative overflow-hidden">
+          <div className="w-[58%] relative overflow-hidden">
             {combo.imagenUrl ? (
               <img
                 src={combo.imagenUrl}
@@ -97,7 +101,7 @@ export default function SeccionCombos({ combos = [] }) {
           </div>
 
           {/* Info — mitad derecha */}
-          <div className="w-[55%] flex flex-col justify-between px-4 py-5">
+          <div className="w-[42%] flex flex-col justify-between px-3 py-4">
             {/* Etiqueta + nombre */}
             <div>
               <span className="text-xs font-bold text-green-300 uppercase tracking-widest">
