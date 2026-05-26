@@ -25,7 +25,7 @@ export default function HistorialPedidos({ onCerrar }) {
       document.body.style.overflow = '';
       document.removeEventListener('keydown', onKey);
     };
-  }, []);
+  }, [onCerrar]);
 
   function repetirPedido(items) {
     cargarItems(items);

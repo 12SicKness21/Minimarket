@@ -18,8 +18,50 @@
     <!-- Viewport con soporte de notch/Dynamic Island -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-    <!-- SEO básico -->
-    <meta name="description" content="Tu tienda latina de confianza — productos de Venezuela, Colombia, Ecuador y más." />
+    <!-- SEO -->
+    <title>Mini Market — Productos latinos en Madrid</title>
+    <meta name="description" content="Tu tienda latina de confianza en Madrid. Productos auténticos de Venezuela, Colombia, Ecuador, Perú, México y más. Envío a domicilio." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://minimarket-puce.vercel.app/" />
+
+    <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content="https://minimarket-puce.vercel.app/" />
+    <meta property="og:title"       content="Mini Market — Productos latinos en Madrid" />
+    <meta property="og:description" content="Productos auténticos de América Latina. Envío a domicilio en Madrid." />
+    <meta property="og:image"       content="https://minimarket-puce.vercel.app/icon.png" />
+    <meta property="og:locale"      content="es_ES" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary" />
+    <meta name="twitter:title"       content="Mini Market — Productos latinos en Madrid" />
+    <meta name="twitter:description" content="Productos auténticos de América Latina. Envío a domicilio en Madrid." />
+    <meta name="twitter:image"       content="https://minimarket-puce.vercel.app/icon.png" />
+
+    <!-- JSON-LD: Negocio local -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GroceryStore",
+      "name": "Mini Market",
+      "description": "Tienda de productos latinoamericanos en Madrid",
+      "url": "https://minimarket-puce.vercel.app/",
+      "image": "https://minimarket-puce.vercel.app/icon.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Madrid",
+        "addressCountry": "ES"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "09:00",
+          "closes": "21:00"
+        }
+      ]
+    }
+    </script>
 
     <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,8 +70,6 @@
       href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
-
-    <title>Minimarket</title>
   </head>
   <body class="font-body bg-white text-gray-900 antialiased">
     <div id="root"></div>

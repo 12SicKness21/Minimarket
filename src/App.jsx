@@ -15,7 +15,6 @@ import Footer from './tienda/components/Footer';
 
 // Admin (lazy - solo se descarga al entrar a /admin)
 const Login = lazy(() => import('./admin/pages/Login'));
-const Dashboard = lazy(() => import('./admin/pages/Dashboard'));
 const Productos = lazy(() => import('./admin/pages/Productos'));
 const Combos = lazy(() => import('./admin/pages/Combos'));
 const Alertas = lazy(() => import('./admin/pages/Alertas'));

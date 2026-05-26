@@ -14,7 +14,7 @@ export default function GaleriaLocal({ onCerrar }) {
       document.body.style.overflow = '';
       document.removeEventListener('keydown', onKey);
     };
-  }, []);
+  }, [onCerrar]);
 
   return createPortal(
     <div className="fixed inset-0 z-[100] bg-black flex flex-col">

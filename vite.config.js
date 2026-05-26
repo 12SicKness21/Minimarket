@@ -42,7 +42,7 @@ export default defineConfig({
       },
       workbox: {
         // Cachea el shell de la app (HTML, CSS, JS, iconos)
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,avif,webp}'],
         // No cachear rutas de admin — siempre frescas
         navigateFallbackDenylist: [/^\/admin/],
         runtimeCaching: [

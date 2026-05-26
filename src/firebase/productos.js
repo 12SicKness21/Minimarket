@@ -8,8 +8,6 @@ import {
   query,
   where,
   orderBy,
-  limit,
-  startAfter,
   serverTimestamp,
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -17,7 +15,6 @@ import imageCompression from 'browser-image-compression';
 import { db, storage } from './config';
 
 const COLECCION = 'productos';
-const POR_PAGINA = 24;
 
 export async function obtenerProductos({ paises, categoria } = {}) {
   // Consulta simple sin indices compuestos — filtrado y orden client-side
