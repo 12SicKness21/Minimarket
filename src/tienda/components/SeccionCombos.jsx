@@ -65,12 +65,9 @@ export default function SeccionCombos({ combos = [] }) {
 
   return (
     <section className="mb-8">
-      {/* Cabecera — imagen decorativa + título */}
-      <div className="flex items-center gap-3 mb-3 px-1">
-        <img src="/combo.avif" alt="Combos" className="w-10 h-10 object-contain" />
-        <h2 className="font-display font-black text-xl text-gray-800 tracking-wide uppercase">
-          Combos
-        </h2>
+      {/* Cabecera — imagen full-width */}
+      <div className="w-full mb-3 overflow-hidden" style={{ width: '100vw', position: 'relative', left: '50%', transform: 'translateX(-50%)' }}>
+        <img src="/combo.avif" alt="Combos" className="w-full object-cover" style={{ maxHeight: 80 }} />
       </div>
 
       <div
