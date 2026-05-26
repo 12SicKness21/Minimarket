@@ -65,6 +65,14 @@ export default function SeccionCombos({ combos = [] }) {
 
   return (
     <section className="mb-8">
+      {/* Cabecera — imagen decorativa + título */}
+      <div className="flex items-center gap-3 mb-3 px-1">
+        <img src="/combo.avif" alt="Combos" className="w-10 h-10 object-contain" />
+        <h2 className="font-display font-black text-xl text-gray-800 tracking-wide uppercase">
+          Combos
+        </h2>
+      </div>
+
       <div
         className="relative overflow-hidden"
         style={{
@@ -104,10 +112,7 @@ export default function SeccionCombos({ combos = [] }) {
           <div className="w-[42%] flex flex-col justify-between px-3 py-4">
             {/* Etiqueta + nombre */}
             <div>
-              <span className="text-xs font-bold text-green-300 uppercase tracking-widest">
-                Oferta combo
-              </span>
-              <h3 className="font-display font-black text-white text-lg leading-snug mt-0.5 line-clamp-3">
+              <h3 className="font-display font-black text-white text-lg leading-snug line-clamp-3">
                 {combo.nombre}
               </h3>
               {combo.descripcion && (
