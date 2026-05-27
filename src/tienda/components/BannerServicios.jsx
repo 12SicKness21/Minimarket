@@ -43,7 +43,7 @@ export default function BannerServicios() {
             = exactamente el ancho de los 14 logos (una copia) → loop perfecto.
           */}
           <div
-            className="absolute inset-y-0 left-0 flex items-center"
+            className="absolute inset-y-0 left-0 flex items-center w-max"
             style={{
               animation: 'marquee 22s linear infinite',
               willChange: 'transform',
