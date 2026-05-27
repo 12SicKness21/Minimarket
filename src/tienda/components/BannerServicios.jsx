@@ -19,23 +19,32 @@ export default function BannerServicios() {
   const items = [...LOGOS, ...LOGOS]; // duplicar para loop infinito
 
   return (
-    <div className="w-full overflow-hidden bg-white border-t border-b border-gray-100 py-3">
-      <div className="flex animate-marquee">
-        {items.map((logo, i) => (
-          <div
-            key={i}
-            className="shrink-0 flex items-center justify-center mx-5"
-            style={{ height: 40 }}
-          >
-            <img
-              src={logo.src}
-              alt={logo.alt}
-              loading="lazy"
-              className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
-            />
-          </div>
-        ))}
+    <>
+      {/* Espaciador para que el contenido no quede tapado por la barra fija */}
+      <div style={{ height: 52 }} />
+
+      {/* Barra fija en la parte inferior */}
+      <div
+        className="fixed bottom-0 left-0 right-0 overflow-hidden bg-white border-t border-gray-200"
+        style={{ zIndex: 40, height: 52, paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        <div className="flex items-center h-full" style={{ animation: 'marquee 18s linear infinite' }}>
+          {items.map((logo, i) => (
+            <div
+              key={i}
+              className="shrink-0 flex items-center justify-center"
+              style={{ marginLeft: 20, marginRight: 20 }}
+            >
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                loading="lazy"
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
