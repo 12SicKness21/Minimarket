@@ -12,7 +12,7 @@ export default function BannerServicios() {
 
   if (logos.length === 0) return <div style={{ height: 52 }} />;
 
-  // Duplicar para loop infinito continuo
+  // Duplicar para loop continuo sin saltos
   const items = [...logos, ...logos];
 
   return (
@@ -35,13 +35,17 @@ export default function BannerServicios() {
           </span>
         </div>
 
-        {/* Zona de desplazamiento */}
-        <div className="flex-1 overflow-hidden relative flex items-center">
+        {/* Zona de desplazamiento — overflow hidden clipa visualmente pero no restringe el ancho del hijo */}
+        <div className="flex-1 overflow-hidden relative">
+          {/*
+            position:absolute saca el div del flujo flex → no queda limitado
+            por el ancho del padre. translateX(-50%) = -50% de su propio ancho
+            = exactamente el ancho de los 14 logos (una copia) → loop perfecto.
+          */}
           <div
-            className="flex items-center h-full"
+            className="absolute inset-y-0 left-0 flex items-center"
             style={{
-              width: 'max-content',
-              animation: 'marquee 20s linear infinite',
+              animation: 'marquee 22s linear infinite',
               willChange: 'transform',
             }}
           >
@@ -49,13 +53,13 @@ export default function BannerServicios() {
               <div
                 key={i}
                 className="shrink-0 flex items-center justify-center"
-                style={{ marginLeft: 16, marginRight: 16 }}
+                style={{ paddingLeft: 18, paddingRight: 18 }}
               >
                 <img
                   src={logo.logoUrl}
                   alt={logo.nombre}
                   loading="lazy"
-                  className="h-7 w-auto object-contain"
+                  style={{ height: 28, width: 'auto', objectFit: 'contain', display: 'block' }}
                 />
               </div>
             ))}
