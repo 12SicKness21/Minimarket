@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   obtenerConfigTienda,
   guardarConfigTienda,
@@ -7,6 +7,10 @@ import {
   guardarRedes,
   guardarUbicacion,
   estaDentroDeHorario,
+  obtenerServicios,
+  guardarServicios,
+  subirLogoServicio,
+  SERVICIOS_DEFAULTS,
 } from '../../firebase/config-tienda';
 
 const DIAS_SEMANA = [
@@ -43,6 +47,16 @@ export default function Configuracion() {
   const [guardandoUbicacion, setGuardandoUbicacion] = useState(false);
   const [ubicacionGuardada, setUbicacionGuardada] = useState(false);
 
+  // Servicios
+  const [servicios, setServicios] = useState(null);
+  const [guardandoServicios, setGuardandoServicios] = useState(false);
+  const [serviciosGuardados, setServiciosGuardados] = useState(false);
+  const [nuevoNombre, setNuevoNombre] = useState('');
+  const [nuevoFile, setNuevoFile] = useState(null);
+  const [nuevoPreview, setNuevoPreview] = useState('');
+  const [agregando, setAgregando] = useState(false);
+  const nuevoInputRef = useRef(null);
+
   // Preview horario
   const [preview, setPreview] = useState(null);
 
@@ -60,6 +74,7 @@ export default function Configuracion() {
         : '');
       setPreview(estaDentroDeHorario(cfg));
     });
+    obtenerServicios().then(setServicios);
   }, []);
 
   function handleChange(e) {
@@ -136,6 +151,60 @@ export default function Configuracion() {
     setMensajeTemporal('');
     setExpiraTemporal('');
     setForm((f) => ({ ...f, mensajePersonalizado: '', mensajePersonalizadoExpira: null }));
+  }
+
+  // ── Handlers servicios ──
+  async function toggleServicio(id) {
+    const nuevos = servicios.map((s) => s.id === id ? { ...s, activo: !s.activo } : s);
+    setServicios(nuevos);
+    await guardarServicios(nuevos);
+  }
+
+  async function eliminarServicio(id) {
+    const nuevos = servicios.filter((s) => s.id !== id);
+    setServicios(nuevos);
+    await guardarServicios(nuevos);
+  }
+
+  function handleNuevoFile(e) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setNuevoFile(file);
+      setNuevoPreview(URL.createObjectURL(file));
+    }
+  }
+
+  async function handleAgregarServicio() {
+    if (!nuevoNombre.trim() || !nuevoFile) return;
+    setAgregando(true);
+    const logoUrl = await subirLogoServicio(nuevoFile, nuevoNombre.trim());
+    const nuevo = {
+      id: `custom_${Date.now()}`,
+      nombre: nuevoNombre.trim(),
+      logoUrl,
+      activo: true,
+    };
+    const nuevos = [...(servicios || []), nuevo];
+    setServicios(nuevos);
+    await guardarServicios(nuevos);
+    setNuevoNombre('');
+    setNuevoFile(null);
+    setNuevoPreview('');
+    if (nuevoInputRef.current) nuevoInputRef.current.value = '';
+    setAgregando(false);
+  }
+
+  async function handleGuardarServicios() {
+    setGuardandoServicios(true);
+    await guardarServicios(servicios);
+    setGuardandoServicios(false);
+    setServiciosGuardados(true);
+    setTimeout(() => setServiciosGuardados(false), 3000);
+  }
+
+  async function resetearServiciosDefault() {
+    setServicios(SERVICIOS_DEFAULTS);
+    await guardarServicios(SERVICIOS_DEFAULTS);
   }
 
   if (!form) return <p className="text-gray-400 text-center py-12">Cargando configuración...</p>;
@@ -437,6 +506,125 @@ export default function Configuracion() {
           </button>
           {redesGuardadas && <span className="text-sm text-green-600 font-medium">✓ Guardado</span>}
         </div>
+      </div>
+
+      {/* ── Otros Servicios ── */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="font-semibold text-gray-800">Otros Servicios</h2>
+          <button
+            type="button"
+            onClick={resetearServiciosDefault}
+            className="text-xs text-gray-400 hover:text-gray-600 underline transition"
+          >
+            Restaurar predeterminados
+          </button>
+        </div>
+
+        {!servicios ? (
+          <p className="text-sm text-gray-400">Cargando...</p>
+        ) : (
+          <>
+            {/* Lista de servicios */}
+            <div className="space-y-2">
+              {servicios.map((s) => (
+                <div key={s.id} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
+                  {/* Toggle activo */}
+                  <button
+                    type="button"
+                    onClick={() => toggleServicio(s.id)}
+                    className={`relative shrink-0 w-9 h-5 rounded-full transition-colors ${s.activo ? 'bg-primario' : 'bg-gray-200'}`}
+                  >
+                    <span className={`block w-3.5 h-3.5 bg-white rounded-full absolute top-0.5 transition-all shadow-sm ${s.activo ? 'left-4' : 'left-0.5'}`} />
+                  </button>
+
+                  {/* Logo */}
+                  <div className="w-12 h-8 flex items-center justify-center shrink-0">
+                    <img
+                      src={s.logoUrl}
+                      alt={s.nombre}
+                      className="max-h-7 max-w-full w-auto object-contain"
+                      style={{ opacity: s.activo ? 1 : 0.35 }}
+                    />
+                  </div>
+
+                  {/* Nombre */}
+                  <span className={`flex-1 text-sm ${s.activo ? 'text-gray-800' : 'text-gray-400'}`}>
+                    {s.nombre}
+                  </span>
+
+                  {/* Eliminar */}
+                  <button
+                    type="button"
+                    onClick={() => eliminarServicio(s.id)}
+                    className="shrink-0 p-1.5 rounded-full hover:bg-red-50 text-gray-300 hover:text-red-500 transition"
+                    title="Eliminar"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Guardar cambios de toggles */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleGuardarServicios}
+                disabled={guardandoServicios}
+                className="bg-primario hover:bg-green-700 text-white font-bold px-5 py-2 rounded-full text-sm transition disabled:opacity-50"
+              >
+                {guardandoServicios ? 'Guardando...' : 'Guardar cambios'}
+              </button>
+              {serviciosGuardados && <span className="text-sm text-green-600 font-medium">✓ Guardado</span>}
+            </div>
+
+            {/* Agregar nuevo servicio */}
+            <div className="border-t border-gray-100 pt-4 space-y-3">
+              <h3 className="text-sm font-semibold text-gray-700">Agregar servicio</h3>
+
+              <div className="flex items-center gap-3">
+                {/* Preview logo */}
+                <label className="cursor-pointer shrink-0">
+                  <div className="w-16 h-12 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden hover:border-primario transition">
+                    {nuevoPreview
+                      ? <img src={nuevoPreview} alt="preview" className="max-h-10 max-w-full object-contain" />
+                      : <span className="text-xl">🖼️</span>
+                    }
+                  </div>
+                  <input
+                    ref={nuevoInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleNuevoFile}
+                    className="sr-only"
+                  />
+                </label>
+
+                {/* Nombre */}
+                <input
+                  type="text"
+                  value={nuevoNombre}
+                  onChange={(e) => setNuevoNombre(e.target.value)}
+                  placeholder="Nombre del servicio"
+                  maxLength={40}
+                  className="flex-1 px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAgregarServicio}
+                disabled={agregando || !nuevoNombre.trim() || !nuevoFile}
+                className="bg-gray-800 hover:bg-gray-700 text-white font-bold px-5 py-2 rounded-full text-sm transition disabled:opacity-40"
+              >
+                {agregando ? 'Subiendo...' : '+ Agregar'}
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       {/* ── Ubicación ── */}

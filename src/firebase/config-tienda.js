@@ -3,6 +3,48 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import imageCompression from 'browser-image-compression';
 import { db, storage } from './config';
 
+// ─── Servicios ───────────────────────────────────────────────────────────────
+
+const SERVICIOS_REF = doc(db, 'configuracion', 'servicios');
+
+export const SERVICIOS_DEFAULTS = [
+  { id: 'amazon-hub', nombre: 'Amazon Hub',    logoUrl: '/servicios/Amazon Hub.avif', activo: true },
+  { id: 'ctt',        nombre: 'CTT',           logoUrl: '/servicios/CTT.webp',        activo: true },
+  { id: 'correos',    nombre: 'Correos',        logoUrl: '/servicios/Correos.png',     activo: true },
+  { id: 'eco',        nombre: 'ECO',            logoUrl: '/servicios/ECO.avif',        activo: true },
+  { id: 'gls',        nombre: 'GLS',            logoUrl: '/servicios/GLS.avif',        activo: true },
+  { id: 'impresion',  nombre: 'Impresión',      logoUrl: '/servicios/Impresion.avif',  activo: true },
+  { id: 'lebara',     nombre: 'Lebara',         logoUrl: '/servicios/LEBARA.png',      activo: true },
+  { id: 'masmovil',   nombre: 'MásMóvil',       logoUrl: '/servicios/MASMOVIL.jpg',    activo: true },
+  { id: 'mrw',        nombre: 'MRW',            logoUrl: '/servicios/MRW.webp',        activo: true },
+  { id: 'orange',     nombre: 'Orange',         logoUrl: '/servicios/ORANGE.png',      activo: true },
+  { id: 'ria',        nombre: 'RIA',            logoUrl: '/servicios/RIA.avif',        activo: true },
+  { id: 'seur',       nombre: 'SEUR',           logoUrl: '/servicios/SEUR.avif',       activo: true },
+  { id: 'tipsa',      nombre: 'TIPSA',          logoUrl: '/servicios/TIPSA.png',       activo: true },
+  { id: 'wu',         nombre: 'Western Union',  logoUrl: '/servicios/WU.png',          activo: true },
+];
+
+export async function obtenerServicios() {
+  const snap = await getDoc(SERVICIOS_REF);
+  if (!snap.exists() || !snap.data()?.items?.length) return SERVICIOS_DEFAULTS;
+  return snap.data().items;
+}
+
+export async function guardarServicios(items) {
+  await setDoc(SERVICIOS_REF, { items });
+}
+
+export async function subirLogoServicio(file, nombre) {
+  const comp = await imageCompression(file, {
+    maxSizeMB: 0.3,
+    maxWidthOrHeight: 400,
+    useWebWorker: true,
+  });
+  const storageRef = ref(storage, `configuracion/servicios/${nombre.replace(/\s+/g, '_')}`);
+  await uploadBytes(storageRef, comp);
+  return await getDownloadURL(storageRef);
+}
+
 const DOC_REF = doc(db, 'configuracion', 'tienda');
 
 export const DEFAULTS = {

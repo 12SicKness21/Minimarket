@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { useCarrito } from '../hooks/useCarrito';
 import { obtenerCatalogos } from '../../firebase/catalogos';
-import { obtenerConfigTienda } from '../../firebase/config-tienda';
+import { obtenerConfigTienda, obtenerServicios } from '../../firebase/config-tienda';
 import GaleriaLocal from '../../tienda/components/GaleriaLocal';
 import HistorialPedidos from '../../tienda/components/HistorialPedidos';
 
@@ -21,6 +21,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
   const [historialAbierto, setHistorialAbierto] = useState(false);
   const [catalogos, setCatalogos] = useState(null);
   const [config, setConfig] = useState(null);
+  const [servicios, setServicios] = useState(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -37,8 +38,9 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
   // Carga datos la primera vez que se abre el menú
   useEffect(() => {
     if (!menuAbierto) return;
-    if (!catalogos) obtenerCatalogos().then(setCatalogos);
-    if (!config)    obtenerConfigTienda().then(setConfig);
+    if (!catalogos)  obtenerCatalogos().then(setCatalogos);
+    if (!config)     obtenerConfigTienda().then(setConfig);
+    if (!servicios)  obtenerServicios().then((items) => setServicios(items.filter((s) => s.activo !== false)));
   }, [menuAbierto]);
 
   function cerrarMenu() {
@@ -341,6 +343,45 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
                       )
                     )}
                   </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* ── Otros Servicios ── */}
+          <div className="border-b border-gray-100">
+            <button
+              onClick={() => toggleSeccion('servicios')}
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+            >
+              Otros Servicios
+              <svg className={`w-4 h-4 text-gray-400 transition-transform ${seccionActiva === 'servicios' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {seccionActiva === 'servicios' && (
+              <div className="px-4 pb-4">
+                {!servicios ? (
+                  <p className="text-xs text-gray-400 px-1">Cargando...</p>
+                ) : servicios.length === 0 ? (
+                  <p className="text-xs text-gray-400 px-1">Sin servicios configurados.</p>
+                ) : (
+                  <div className="grid grid-cols-3 gap-x-2 gap-y-3">
+                    {servicios.map((s) => (
+                      <div key={s.id} className="flex flex-col items-center gap-1">
+                        <div className="w-14 h-10 flex items-center justify-center">
+                          <img
+                            src={s.logoUrl}
+                            alt={s.nombre}
+                            className="max-h-9 max-w-full w-auto object-contain"
+                          />
+                        </div>
+                        <span className="text-[10px] text-gray-500 text-center leading-tight font-medium">
+                          {s.nombre}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             )}
