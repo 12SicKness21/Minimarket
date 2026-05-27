@@ -108,9 +108,10 @@ async function subirImagen(productoId, file) {
     maxWidthOrHeight: 800,
     maxSizeMB: 0.5,
     useWebWorker: true,
+    fileType: 'image/webp'
   };
   const comprimida = await imageCompression(file, opciones);
-  const storageRef = ref(storage, `productos/${productoId}/imagen.jpg`);
+  const storageRef = ref(storage, `productos/${productoId}/imagen.webp`);
   await uploadBytes(storageRef, comprimida);
   return getDownloadURL(storageRef);
 }

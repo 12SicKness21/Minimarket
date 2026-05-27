@@ -92,7 +92,7 @@ export default function ComboForm({ combo, onGuardar, onCerrar, onEliminar, guar
         maxSizeMB: 1,
         initialQuality: 0.7,
         useWebWorker: true,
-        fileType: 'image/jpeg',
+        fileType: 'image/webp',
       });
       setImagen(comprimida);
       setPreviewUrl(URL.createObjectURL(comprimida));

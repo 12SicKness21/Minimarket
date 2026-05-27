@@ -39,6 +39,7 @@ export async function subirLogoServicio(file, nombre) {
     maxSizeMB: 0.3,
     maxWidthOrHeight: 400,
     useWebWorker: true,
+    fileType: 'image/webp',
   });
   const storageRef = ref(storage, `configuracion/servicios/${nombre.replace(/\s+/g, '_')}`);
   await uploadBytes(storageRef, comp);
@@ -101,6 +102,7 @@ export async function guardarUbicacion(imagenFile, datos) {
       maxSizeMB: 1,
       maxWidthOrHeight: 1200,
       useWebWorker: true,
+      fileType: 'image/webp',
     });
     const storageRef = ref(storage, 'configuracion/mapa');
     await uploadBytes(storageRef, comp);

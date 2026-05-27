@@ -70,10 +70,10 @@ async function subirImagenCombo(comboId, file) {
     maxSizeMB: 1,
     initialQuality: 0.7,
     useWebWorker: true,
-    fileType: 'image/jpeg',
+    fileType: 'image/webp',
   };
   const comprimida = await imageCompression(file, opciones);
-  const storageRef = ref(storage, `combos/${comboId}/imagen.jpg`);
+  const storageRef = ref(storage, `combos/${comboId}/imagen.webp`);
   await uploadBytes(storageRef, comprimida);
   return getDownloadURL(storageRef);
 }
