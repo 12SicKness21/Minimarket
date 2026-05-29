@@ -11,6 +11,9 @@ import {
   guardarServicios,
   subirLogoServicio,
   SERVICIOS_DEFAULTS,
+  obtenerImagenesLocal,
+  guardarImagenesLocal,
+  subirImagenLocal,
 } from '../../firebase/config-tienda';
 
 const DIAS_SEMANA = [
@@ -57,6 +60,11 @@ export default function Configuracion() {
   const [agregando, setAgregando] = useState(false);
   const nuevoInputRef = useRef(null);
 
+  // Galería del local
+  const [galeria, setGaleria] = useState(null);
+  const [subiendoFoto, setSubiendoFoto] = useState(false);
+  const galeriaInputRef = useRef(null);
+
   // Preview horario
   const [preview, setPreview] = useState(null);
 
@@ -75,6 +83,7 @@ export default function Configuracion() {
       setPreview(estaDentroDeHorario(cfg));
     });
     obtenerServicios().then(setServicios);
+    obtenerImagenesLocal().then(setGaleria);
   }, []);
 
   function handleChange(e) {
@@ -205,6 +214,25 @@ export default function Configuracion() {
   async function resetearServiciosDefault() {
     setServicios(SERVICIOS_DEFAULTS);
     await guardarServicios(SERVICIOS_DEFAULTS);
+  }
+
+  // ── Handlers galería ──
+  async function handleSubirFoto(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSubiendoFoto(true);
+    const item = await subirImagenLocal(file);
+    const nuevas = [...(galeria || []), item];
+    setGaleria(nuevas);
+    await guardarImagenesLocal(nuevas);
+    setSubiendoFoto(false);
+    if (galeriaInputRef.current) galeriaInputRef.current.value = '';
+  }
+
+  async function handleEliminarFoto(id) {
+    const nuevas = galeria.filter((img) => img.id !== id);
+    setGaleria(nuevas);
+    await guardarImagenesLocal(nuevas);
   }
 
   if (!form) return <p className="text-gray-400 text-center py-12">Cargando configuración...</p>;
@@ -506,6 +534,72 @@ export default function Configuracion() {
           </button>
           {redesGuardadas && <span className="text-sm text-green-600 font-medium">✓ Guardado</span>}
         </div>
+      </div>
+
+      {/* ── Imágenes del local ── */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
+        <h2 className="font-semibold text-gray-800">Imágenes del local</h2>
+        <p className="text-xs text-gray-400">
+          Estas imágenes se muestran en "Imágenes nuestras" del menú de la tienda.
+        </p>
+
+        {!galeria ? (
+          <p className="text-sm text-gray-400">Cargando...</p>
+        ) : (
+          <>
+            {/* Cuadrícula de fotos existentes */}
+            {galeria.length > 0 && (
+              <div className="grid grid-cols-3 gap-2">
+                {galeria.map((img) => (
+                  <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden bg-gray-100">
+                    <img
+                      src={img.url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                    {/* Botón eliminar al hacer hover */}
+                    <button
+                      type="button"
+                      onClick={() => handleEliminarFoto(img.id)}
+                      className="absolute top-1 right-1 p-1 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition hover:bg-red-600"
+                      title="Eliminar"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {galeria.length === 0 && (
+              <p className="text-sm text-gray-400 text-center py-4">Sin imágenes todavía.</p>
+            )}
+
+            {/* Botón subir nueva foto */}
+            <label className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 hover:border-primario hover:bg-green-50 transition text-sm font-medium text-gray-500 hover:text-primario">
+              {subiendoFoto ? (
+                'Subiendo...'
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Agregar foto
+                </>
+              )}
+              <input
+                ref={galeriaInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleSubirFoto}
+                disabled={subiendoFoto}
+                className="sr-only"
+              />
+            </label>
+          </>
+        )}
       </div>
 
       {/* ── Otros Servicios ── */}

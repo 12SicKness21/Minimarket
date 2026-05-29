@@ -46,6 +46,47 @@ export async function subirLogoServicio(file, nombre) {
   return await getDownloadURL(storageRef);
 }
 
+// ─── Galería del local ────────────────────────────────────────────────────────
+
+const GALERIA_REF = doc(db, 'configuracion', 'galeria');
+
+export const GALERIA_DEFAULTS = [
+  { id: 'tienda',  url: '/local/tienda.avif' },
+  { id: 'local01', url: '/local/local 01.avif' },
+  { id: 'local02', url: '/local/local 02.avif' },
+  { id: 'local03', url: '/local/local 03.avif' },
+  { id: 'local04', url: '/local/local 04.avif' },
+  { id: 'local05', url: '/local/local 05.avif' },
+  { id: 'local06', url: '/local/local 06.avif' },
+  { id: 'local07', url: '/local/local 07.avif' },
+  { id: 'local08', url: '/local/local 08.avif' },
+  { id: 'local09', url: '/local/local 09.avif' },
+];
+
+export async function obtenerImagenesLocal() {
+  const snap = await getDoc(GALERIA_REF);
+  if (!snap.exists() || !snap.data()?.items?.length) return GALERIA_DEFAULTS;
+  return snap.data().items;
+}
+
+export async function guardarImagenesLocal(items) {
+  await setDoc(GALERIA_REF, { items });
+}
+
+export async function subirImagenLocal(file) {
+  const comp = await imageCompression(file, {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1400,
+    useWebWorker: true,
+    fileType: 'image/webp',
+  });
+  const id = `galeria_${Date.now()}`;
+  const storageRef = ref(storage, `configuracion/galeria/${id}`);
+  await uploadBytes(storageRef, comp);
+  const url = await getDownloadURL(storageRef);
+  return { id, url };
+}
+
 const DOC_REF = doc(db, 'configuracion', 'tienda');
 
 export const DEFAULTS = {

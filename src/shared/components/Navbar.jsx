@@ -400,7 +400,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
             </button>
           </div>
 
-          {/* ── Historial de pedidos ── */}
+          {/* ── Historial de pedidos ── (desactivado temporalmente)
           <div className="border-b border-gray-100">
             <button
               onClick={() => { cerrarMenu(); setHistorialAbierto(true); }}
@@ -414,6 +414,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
               </svg>
             </button>
           </div>
+          */}
 
         </div>
       </div>
