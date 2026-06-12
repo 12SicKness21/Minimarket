@@ -25,12 +25,19 @@ function FlagPeru() {
     );
 }
 
-function FlagMexico() {
+function FlagRepDominicana() {
+    const cw = W * 0.12; // ancho de la cruz blanca
+    const ch = H * 0.055; // alto de la cruz blanca
     return (
         <g>
-            <rect x={0} y={0} width={W / 3} height={H} fill="#006847" />
-            <rect x={W / 3} y={0} width={W / 3} height={H} fill="#FFFFFF" />
-            <rect x={W * 2 / 3} y={0} width={W / 3} height={H} fill="#CE1126" />
+            {/* Cuadrantes: azul / rojo arriba, rojo / azul abajo */}
+            <rect x={0} y={0} width={W / 2} height={H / 2} fill="#002D62" />
+            <rect x={W / 2} y={0} width={W / 2} height={H / 2} fill="#CE1126" />
+            <rect x={0} y={H / 2} width={W / 2} height={H / 2} fill="#CE1126" />
+            <rect x={W / 2} y={H / 2} width={W / 2} height={H / 2} fill="#002D62" />
+            {/* Cruz blanca central */}
+            <rect x={(W - cw) / 2} y={0} width={cw} height={H} fill="#FFFFFF" />
+            <rect x={0} y={(H - ch) / 2} width={W} height={ch} fill="#FFFFFF" />
         </g>
     );
 }
@@ -95,13 +102,39 @@ function FlagVenezuela() {
     );
 }
 
-function FlagChile() {
+function FlagElSalvador() {
+    const cx = W / 2, cy = H / 2;
     return (
         <g>
-            <rect x={0} y={0} width={W} height={H / 2} fill="#FFFFFF" />
-            <rect x={0} y={H / 2} width={W} height={H / 2} fill="#D52B1E" />
-            <rect x={0} y={0} width={W * 0.3} height={H / 2} fill="#003082" />
-            <path d={star5(W * 0.15, H * 0.25, W * 0.09)} fill="#FFFFFF" />
+            <rect x={0} y={0} width={W} height={H / 3} fill="#0F47AF" />
+            <rect x={0} y={H / 3} width={W} height={H / 3} fill="#FFFFFF" />
+            <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#0F47AF" />
+            {/* Emblema simplificado: triángulo con franja azul-blanco-azul */}
+            <g transform={'translate(' + cx + ',' + cy + ')'}>
+                <path d={'M0,' + (-W * 0.13) + ' L' + (W * 0.15) + ',' + (W * 0.1) + ' L' + (-W * 0.15) + ',' + (W * 0.1) + ' Z'}
+                    fill="none" stroke="#0F47AF" strokeWidth={3} />
+                <rect x={-W * 0.115} y={W * 0.04} width={W * 0.23} height={W * 0.018} fill="#0F47AF" />
+                <rect x={-W * 0.115} y={W * 0.06} width={W * 0.23} height={W * 0.018} fill="#CE1126" />
+                <circle r={W * 0.03} cy={-W * 0.02} fill="#FFD100" stroke="#0F47AF" strokeWidth={1.5} />
+            </g>
+        </g>
+    );
+}
+
+function FlagHonduras() {
+    const cx = W / 2, cy = H / 2, sr = W * 0.035, sp = W * 0.13;
+    const estrellas = [
+        [cx, cy], [cx - sp, cy - sp], [cx + sp, cy - sp],
+        [cx - sp, cy + sp], [cx + sp, cy + sp],
+    ];
+    return (
+        <g>
+            <rect x={0} y={0} width={W} height={H / 3} fill="#0073CF" />
+            <rect x={0} y={H / 3} width={W} height={H / 3} fill="#FFFFFF" />
+            <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#0073CF" />
+            {estrellas.map(([x, y], i) => (
+                <path key={i} d={star5(x, y, sr)} fill="#0073CF" />
+            ))}
         </g>
     );
 }
@@ -126,18 +159,6 @@ function FlagBolivia() {
     );
 }
 
-function FlagUruguay() {
-    const sh = H / 9;
-    return (
-        <g>
-            {[0, 2, 4, 6, 8].map(i => <rect key={'w' + i} x={0} y={i * sh} width={W} height={sh} fill="#FFFFFF" />)}
-            {[1, 3, 5, 7].map(i => <rect key={'b' + i} x={0} y={i * sh} width={W} height={sh} fill="#5B92C4" />)}
-            <rect x={0} y={0} width={W * 0.35} height={sh * 4} fill="#FFFFFF" />
-            <circle cx={W * 0.175} cy={sh * 2} r={sh * 0.9} fill="#F8D000" />
-        </g>
-    );
-}
-
 function FlagParaguay() {
     return (
         <g>
@@ -150,14 +171,14 @@ function FlagParaguay() {
 
 const FLAGS = [
     { name: 'Perú', emoji: '🇵🇪', Component: FlagPeru },
-    { name: 'México', emoji: '🇲🇽', Component: FlagMexico },
+    { name: 'Rep. Dominicana', emoji: '🇩🇴', Component: FlagRepDominicana },
     { name: 'Colombia', emoji: '🇨🇴', Component: FlagColombia },
     { name: 'Argentina', emoji: '🇦🇷', Component: FlagArgentina },
     { name: 'Venezuela', emoji: '🇻🇪', Component: FlagVenezuela },
-    { name: 'Chile', emoji: '🇨🇱', Component: FlagChile },
+    { name: 'El Salvador', emoji: '🇸🇻', Component: FlagElSalvador },
     { name: 'Ecuador', emoji: '🇪🇨', Component: FlagEcuador },
     { name: 'Bolivia', emoji: '🇧🇴', Component: FlagBolivia },
-    { name: 'Uruguay', emoji: '🇺🇾', Component: FlagUruguay },
+    { name: 'Honduras', emoji: '🇭🇳', Component: FlagHonduras },
     { name: 'Paraguay', emoji: '🇵🇾', Component: FlagParaguay },
 ];
 
