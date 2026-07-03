@@ -18,7 +18,6 @@ import BannerServicios from './tienda/components/BannerServicios';
 const Login = lazy(() => import('./admin/pages/Login'));
 const Productos = lazy(() => import('./admin/pages/Productos'));
 const Combos = lazy(() => import('./admin/pages/Combos'));
-const Alertas = lazy(() => import('./admin/pages/Alertas'));
 const Configuracion = lazy(() => import('./admin/pages/Configuracion'));
 const Catalogos = lazy(() => import('./admin/pages/Catalogos'));
 const AdminLayout = lazy(() => import('./admin/components/AdminLayout'));
@@ -98,11 +97,6 @@ export default function App() {
           <Route path="/admin/combos" element={
             <RutaProtegida usuario={usuario}>
               <AdminLayout><Combos /></AdminLayout>
-            </RutaProtegida>
-          } />
-          <Route path="/admin/alertas" element={
-            <RutaProtegida usuario={usuario}>
-              <AdminLayout><Alertas /></AdminLayout>
             </RutaProtegida>
           } />
           <Route path="/admin/catalogos" element={

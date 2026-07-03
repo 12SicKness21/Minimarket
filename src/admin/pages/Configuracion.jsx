@@ -109,8 +109,6 @@ export default function Configuracion() {
     setGuardando(true);
     await guardarConfigTienda({
       ...form,
-      alertaStockUnidades: parseInt(form.alertaStockUnidades) || 10,
-      alertaCaducidadDias: parseInt(form.alertaCaducidadDias) || 90,
       costoEnvioBarrio: parseFloat(form.costoEnvioBarrio) || 2,
       costoEnvioFuera: parseFloat(form.costoEnvioFuera) || 5,
     });
@@ -368,26 +366,6 @@ export default function Configuracion() {
             </div>
           </div>
         </div>
-
-        {/* ── Alertas de inventario — comentado
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Alertas de inventario</label>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs text-gray-400 mb-1 block">Stock mínimo (uds.)</label>
-              <input name="alertaStockUnidades" type="number" min="0"
-                value={form.alertaStockUnidades} onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario" />
-            </div>
-            <div>
-              <label className="text-xs text-gray-400 mb-1 block">Caducidad (días)</label>
-              <input name="alertaCaducidadDias" type="number" min="0"
-                value={form.alertaCaducidadDias} onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario" />
-            </div>
-          </div>
-        </div>
-        ── */}
 
         {/* ── Email para alertas — comentado
         <div>

@@ -90,8 +90,6 @@ export async function subirImagenLocal(file) {
 const DOC_REF = doc(db, 'configuracion', 'tienda');
 
 export const DEFAULTS = {
-  alertaStockUnidades: 10,
-  alertaCaducidadDias: 90,
   costoEnvioBarrio: 2,
   costoEnvioFuera: 5,
   horaApertura: '09:00',

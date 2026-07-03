@@ -32,18 +32,14 @@ export default function ProductoCard({ producto }) {
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col">
       {/* Imagen */}
       <div className="aspect-square bg-gray-50 relative overflow-hidden">
-        {producto.imagenUrl ? (
-          <img
-            src={producto.imagenUrl}
-            alt={producto.nombre}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl text-gray-200">
-            📦
-          </div>
-        )}
+        <img
+          src={producto.imagenUrl || '/icon.png'}
+          alt={producto.nombre}
+          className={producto.imagenUrl
+            ? 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+            : 'w-full h-full object-contain p-8 opacity-40'}
+          loading="lazy"
+        />
         {producto.recienLlegado && (
           <span className="absolute top-2 left-2 bg-secundario text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
             Nuevo

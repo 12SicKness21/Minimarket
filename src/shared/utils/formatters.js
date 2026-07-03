@@ -11,11 +11,3 @@ export function formatFecha(timestamp) {
     year: 'numeric',
   });
 }
-
-export function diasHastaFecha(timestamp) {
-  if (!timestamp) return null;
-  const fecha = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-  const ahora = new Date();
-  const diff = fecha.getTime() - ahora.getTime();
-  return Math.ceil(diff / (1000 * 60 * 60 * 24));
-}

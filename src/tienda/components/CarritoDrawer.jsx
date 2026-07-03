@@ -96,10 +96,11 @@ export default function CarritoDrawer({ abierto, onCerrar }) {
                   {items.map((item) => (
                     <div key={item.productoId} className="flex gap-3 items-center">
                       <div className="w-14 h-14 rounded-xl bg-gray-50 shrink-0 overflow-hidden">
-                        {item.imagenUrl
-                          ? <img src={item.imagenUrl} alt={item.nombre} className="w-full h-full object-cover" />
-                          : <div className="w-full h-full flex items-center justify-center text-xl text-gray-300">📦</div>
-                        }
+                        <img
+                          src={item.imagenUrl || '/icon.png'}
+                          alt={item.nombre}
+                          className={item.imagenUrl ? 'w-full h-full object-cover' : 'w-full h-full object-contain p-2 opacity-40'}
+                        />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5 mb-0.5">

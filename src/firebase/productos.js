@@ -16,6 +16,12 @@ import { db, storage } from './config';
 
 const COLECCION = 'productos';
 
+function generarSKU(categoria) {
+  const prefijo = (categoria || 'GEN').slice(0, 3).toUpperCase();
+  const sufijo = Date.now().toString().slice(-6);
+  return `${prefijo}-${sufijo}`;
+}
+
 export async function obtenerProductos({ paises, categoria } = {}) {
   // Consulta simple sin indices compuestos — filtrado y orden client-side
   const q = query(collection(db, COLECCION), where('activo', '==', true));
@@ -78,6 +84,7 @@ export async function crearProducto(data, imagenFile) {
   const docRef = await addDoc(collection(db, COLECCION), {
     ...data,
     imagenUrl: '',
+    sku: generarSKU(data.categoria),
     creadoEn: serverTimestamp(),
     actualizadoEn: serverTimestamp(),
   });
@@ -114,31 +121,4 @@ async function subirImagen(productoId, file) {
   const storageRef = ref(storage, `productos/${productoId}/imagen.webp`);
   await uploadBytes(storageRef, comprimida);
   return getDownloadURL(storageRef);
-}
-
-export async function obtenerProductosAlerta(umbralStock, umbralDias) {
-  const ahora = new Date();
-  const fechaLimite = new Date(ahora.getTime() + umbralDias * 24 * 60 * 60 * 1000);
-
-  // Consulta simple sin indices compuestos
-  const snapshot = await getDocs(query(collection(db, COLECCION), where('activo', '==', true)));
-  const todos = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-
-  const stockBajo = todos
-    .filter((p) => p.stockActual <= umbralStock)
-    .sort((a, b) => a.stockActual - b.stockActual);
-
-  const proximosCaducar = todos
-    .filter((p) => {
-      if (!p.fechaCaducidad) return false;
-      const fecha = p.fechaCaducidad.toDate ? p.fechaCaducidad.toDate() : new Date(p.fechaCaducidad);
-      return fecha <= fechaLimite;
-    })
-    .sort((a, b) => {
-      const fa = a.fechaCaducidad?.toDate?.() || new Date(a.fechaCaducidad);
-      const fb = b.fechaCaducidad?.toDate?.() || new Date(b.fechaCaducidad);
-      return fa - fb;
-    });
-
-  return { stockBajo, proximosCaducar };
 }

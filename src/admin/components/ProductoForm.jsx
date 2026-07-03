@@ -16,8 +16,6 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
     precio: '',
     categoria: 'otros',
     paises: [],
-    stockActual: '',
-    fechaCaducidad: '',
     recienLlegado: false,
     activo: true,
     keywords: [],
@@ -33,12 +31,6 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
         precio: producto.precio?.toString() || '',
         categoria: producto.categoria || 'otros',
         paises: producto.paises || [],
-        stockActual: producto.stockActual?.toString() || '',
-        fechaCaducidad: producto.fechaCaducidad
-          ? (producto.fechaCaducidad.toDate ? producto.fechaCaducidad.toDate() : new Date(producto.fechaCaducidad))
-              .toISOString()
-              .split('T')[0]
-          : '',
         recienLlegado: producto.recienLlegado || false,
         activo: producto.activo ?? true,
         keywords: producto.keywords || [],
@@ -78,8 +70,6 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
       ...form,
       paises: paisesFinal,
       precio: parseFloat(form.precio) || 0,
-      stockActual: parseInt(form.stockActual) || 0,
-      fechaCaducidad: form.fechaCaducidad ? new Date(form.fechaCaducidad) : null,
     };
     onGuardar(data, imagen);
   }
@@ -151,20 +141,13 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
             />
           </div>
 
-          {/* Stock — comentado
+          {/* SKU — solo lectura, se genera automáticamente al crear */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
-            <input
-              name="stockActual"
-              type="number"
-              min="0"
-              value={form.stockActual}
-              onChange={handleChange}
-              placeholder="0"
-              className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-1">SKU interno</label>
+            <div className="w-full px-3 py-2.5 border rounded-xl text-sm bg-gray-50 text-gray-500">
+              {producto?.sku || 'Se generará automáticamente al guardar'}
+            </div>
           </div>
-          */}
 
           {/* Categoría */}
           <div>
@@ -180,19 +163,6 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
               ))}
             </select>
           </div>
-
-          {/* Caducidad — comentado
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Caducidad</label>
-            <input
-              name="fechaCaducidad"
-              type="date"
-              value={form.fechaCaducidad}
-              onChange={handleChange}
-              className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
-            />
-          </div>
-          */}
 
           {/* Países */}
           <div>
@@ -221,10 +191,11 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
             <label className="flex items-center gap-3 cursor-pointer">
               {/* Zona de preview / tap */}
               <div className="w-20 h-20 shrink-0 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden hover:border-primario transition">
-                {previewUrl
-                  ? <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                  : <span className="text-2xl">📷</span>
-                }
+                <img
+                  src={previewUrl || '/icon.png'}
+                  alt="Preview"
+                  className={previewUrl ? 'w-full h-full object-cover' : 'w-10 h-10 object-contain opacity-50'}
+                />
               </div>
               <div className="text-sm text-gray-500">
                 <span className="text-primario font-medium">Toca para elegir</span> o arrastra una foto

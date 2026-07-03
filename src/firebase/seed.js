@@ -1,4 +1,4 @@
-import { collection, addDoc, doc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './config';
 
 const productosEjemplo = [
@@ -9,10 +9,8 @@ const productosEjemplo = [
     categoria: 'harinas',
     paises: ['venezuela'],
     imagenUrl: '',
-    stockActual: 50,
     activo: true,
     recienLlegado: true,
-    fechaCaducidad: Timestamp.fromDate(new Date('2026-12-01')),
     keywords: ['harina', 'pan', 'arepa', 'maiz', 'venezolano'],
   },
   {
@@ -22,10 +20,8 @@ const productosEjemplo = [
     categoria: 'bebidas',
     paises: ['venezuela'],
     imagenUrl: '',
-    stockActual: 30,
     activo: true,
     recienLlegado: true,
-    fechaCaducidad: Timestamp.fromDate(new Date('2026-08-15')),
     keywords: ['malta', 'polar', 'bebida', 'venezolano'],
   },
   {
@@ -35,10 +31,8 @@ const productosEjemplo = [
     categoria: 'bebidas',
     paises: ['colombia'],
     imagenUrl: '',
-    stockActual: 20,
     activo: true,
     recienLlegado: false,
-    fechaCaducidad: Timestamp.fromDate(new Date('2027-03-01')),
     keywords: ['cafe', 'juan valdez', 'colombiano', 'molido'],
   },
   {
@@ -48,10 +42,8 @@ const productosEjemplo = [
     categoria: 'bebidas',
     paises: ['peru'],
     imagenUrl: '',
-    stockActual: 40,
     activo: true,
     recienLlegado: true,
-    fechaCaducidad: Timestamp.fromDate(new Date('2026-10-01')),
     keywords: ['inca', 'kola', 'refresco', 'peruano'],
   },
   {
@@ -61,10 +53,8 @@ const productosEjemplo = [
     categoria: 'conservas',
     paises: ['mexico'],
     imagenUrl: '',
-    stockActual: 25,
     activo: true,
     recienLlegado: false,
-    fechaCaducidad: Timestamp.fromDate(new Date('2027-06-01')),
     keywords: ['salsa', 'valentina', 'picante', 'mexicano'],
   },
   {
@@ -74,10 +64,8 @@ const productosEjemplo = [
     categoria: 'lacteos',
     paises: ['general'],
     imagenUrl: '',
-    stockActual: 35,
     activo: true,
     recienLlegado: false,
-    fechaCaducidad: Timestamp.fromDate(new Date('2027-01-15')),
     keywords: ['leche', 'condensada', 'lechera', 'dulce'],
   },
   {
@@ -87,10 +75,8 @@ const productosEjemplo = [
     categoria: 'snacks',
     paises: ['ecuador'],
     imagenUrl: '',
-    stockActual: 60,
     activo: true,
     recienLlegado: true,
-    fechaCaducidad: Timestamp.fromDate(new Date('2026-09-01')),
     keywords: ['platanitos', 'chips', 'platano', 'ecuatoriano', 'snack'],
   },
   {
@@ -100,10 +86,8 @@ const productosEjemplo = [
     categoria: 'bebidas',
     paises: ['republica_dominicana'],
     imagenUrl: '',
-    stockActual: 10,
     activo: true,
     recienLlegado: false,
-    fechaCaducidad: null,
     keywords: ['mama juana', 'dominicano', 'hierbas', 'bebida'],
   },
   {
@@ -113,10 +97,8 @@ const productosEjemplo = [
     categoria: 'bebidas',
     paises: ['cuba'],
     imagenUrl: '',
-    stockActual: 15,
     activo: true,
     recienLlegado: false,
-    fechaCaducidad: Timestamp.fromDate(new Date('2027-02-01')),
     keywords: ['cafe', 'cubita', 'cubano', 'molido'],
   },
   {
@@ -126,10 +108,8 @@ const productosEjemplo = [
     categoria: 'limpieza',
     paises: ['mexico', 'general'],
     imagenUrl: '',
-    stockActual: 8,
     activo: true,
     recienLlegado: false,
-    fechaCaducidad: null,
     keywords: ['fabuloso', 'limpiador', 'lavanda', 'limpieza'],
   },
 ];
@@ -190,8 +170,6 @@ export async function ejecutarSeed() {
 
   // Configuración por defecto
   await setDoc(doc(db, 'configuracion', 'tienda'), {
-    alertaStockUnidades: 10,
-    alertaCaducidadDias: 90,
     costoEnvioBarrio: 2,
     costoEnvioFuera: 5,
     horaApertura: '09:00',

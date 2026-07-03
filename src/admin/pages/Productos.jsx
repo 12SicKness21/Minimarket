@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { obtenerTodosProductos, crearProducto, actualizarProducto } from '../../firebase/productos';
-import { formatPrecio, formatFecha } from '../../shared/utils/formatters';
+import { formatPrecio } from '../../shared/utils/formatters';
 import ProductoForm from '../components/ProductoForm';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -139,12 +139,11 @@ export default function Productos() {
                 <thead>
                   <tr className="bg-gray-50 text-left text-gray-500 text-xs uppercase">
                     <th className="px-4 py-3">Imagen</th>
+                    <th className="px-4 py-3">SKU</th>
                     <th className="px-4 py-3">Nombre</th>
                     <th className="px-4 py-3">Categoría</th>
                     <th className="px-4 py-3">Países</th>
                     <th className="px-4 py-3">Precio</th>
-                    <th className="px-4 py-3">Stock</th>
-                    <th className="px-4 py-3">Caducidad</th>
                     <th className="px-4 py-3">Nuevo</th>
                     <th className="px-4 py-3">Activo</th>
                     <th className="px-4 py-3"></th>
@@ -155,23 +154,18 @@ export default function Productos() {
                     <tr key={p.id} className="hover:bg-gray-50 transition">
                       <td className="px-4 py-2">
                         <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden">
-                          {p.imagenUrl ? (
-                            <img src={p.imagenUrl} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-300 text-sm">📦</div>
-                          )}
+                          <img
+                            src={p.imagenUrl || '/icon.png'}
+                            alt=""
+                            className={p.imagenUrl ? 'w-full h-full object-cover' : 'w-full h-full object-contain p-1.5 opacity-50'}
+                          />
                         </div>
                       </td>
+                      <td className="px-4 py-2 text-gray-400 text-xs font-mono whitespace-nowrap">{p.sku || '—'}</td>
                       <td className="px-4 py-2 font-medium text-gray-800 max-w-[200px] truncate">{p.nombre}</td>
                       <td className="px-4 py-2 text-gray-500 capitalize">{p.categoria}</td>
                       <td className="px-4 py-2">{p.paises?.map((pa) => BANDERAS[pa]).join(' ')}</td>
                       <td className="px-4 py-2 font-medium">{formatPrecio(p.precio)}</td>
-                      <td className="px-4 py-2">
-                        <span className={p.stockActual <= 10 ? 'text-red-500 font-semibold' : 'text-gray-600'}>
-                          {p.stockActual}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 text-gray-500 text-xs">{formatFecha(p.fechaCaducidad)}</td>
                       <td className="px-4 py-2">
                         <button
                           onClick={() => toggleCampo(p.id, 'recienLlegado', p.recienLlegado)}
