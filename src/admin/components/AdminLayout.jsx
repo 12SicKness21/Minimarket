@@ -3,11 +3,11 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 
 const NAV_ITEMS = [
-  // { path: '/admin', label: 'Dashboard', icon: '📊' }, // Dashboard desactivado
-  { path: '/admin/productos', label: 'Productos', icon: '📦' },
-  { path: '/admin/combos', label: 'Combos', icon: '🛍️' },
-  { path: '/admin/catalogos', label: 'Catálogos', icon: '🏷️' },
-  { path: '/admin/configuracion', label: 'Configuración', icon: '⚙️' },
+  // { path: '/admin', label: 'Dashboard', icon:}, // Dashboard desactivado
+  { path: '/admin/productos', label: 'Productos' },
+  { path: '/admin/combos', label: 'Combos' },
+  { path: '/admin/catalogos', label: 'Catálogos' },
+  { path: '/admin/configuracion', label: 'Configuración' },
 ];
 
 export default function AdminLayout({ children }) {
@@ -37,11 +37,10 @@ export default function AdminLayout({ children }) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${
-                  activo
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activo
                     ? 'bg-green-50 text-primario'
                     : 'text-gray-600 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <span>{item.icon}</span>
                 <span>{item.label}</span>
@@ -72,9 +71,8 @@ export default function AdminLayout({ children }) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-lg p-1.5 rounded-lg ${
-                  location.pathname === item.path ? 'bg-green-50' : ''
-                }`}
+                className={`text-lg p-1.5 rounded-lg ${location.pathname === item.path ? 'bg-green-50' : ''
+                  }`}
               >
                 {item.icon}
               </Link>
