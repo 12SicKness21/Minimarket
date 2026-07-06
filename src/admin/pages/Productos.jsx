@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { obtenerTodosProductos, crearProducto, actualizarProducto } from '../../firebase/productos';
+import { generarPlantillaExcel, leerExcelProductos, crearProductosMasivo } from '../../firebase/importarProductos';
 import { formatPrecio } from '../../shared/utils/formatters';
+import { useCatalogos } from '../../shared/hooks/useCatalogos';
 import ProductoForm from '../components/ProductoForm';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -13,6 +15,7 @@ const BANDERAS = {
 const CATEGORIAS = ['harinas', 'bebidas', 'lacteos', 'snacks', 'conservas', 'limpieza', 'otros'];
 
 export default function Productos() {
+  const { categorias, paises } = useCatalogos();
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
@@ -23,6 +26,12 @@ export default function Productos() {
   const [guardando, setGuardando] = useState(false);
   const [pagina, setPagina] = useState(0);
   const POR_PAGINA = 20;
+
+  // Carga masiva desde Excel
+  const [importando, setImportando] = useState(false);
+  const [resultadoImport, setResultadoImport] = useState(null);
+  const [previaImport, setPreviaImport] = useState(null); // { validos, errores }
+  const inputExcelRef = useRef(null);
 
   async function cargar() {
     setCargando(true);
@@ -87,17 +96,73 @@ export default function Productos() {
     setModalAbierto(true);
   }
 
+  function handleDescargarPlantilla() {
+    generarPlantillaExcel(categorias, paises);
+  }
+
+  async function handleSeleccionarExcel(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setResultadoImport(null);
+    const { validos, errores } = await leerExcelProductos(file, { categorias, paises });
+    setPreviaImport({ validos, errores });
+    if (inputExcelRef.current) inputExcelRef.current.value = '';
+  }
+
+  async function handleConfirmarImport() {
+    if (!previaImport || previaImport.validos.length === 0) return;
+    setImportando(true);
+    const { creados, fallidos } = await crearProductosMasivo(previaImport.validos);
+    setImportando(false);
+    setPreviaImport(null);
+    setResultadoImport({ creados, fallidos });
+    cargar();
+  }
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
         <h1 className="font-display font-bold text-2xl text-gray-800">Productos</h1>
-        <button
-          onClick={abrirNuevo}
-          className="bg-primario hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-full text-sm transition"
-        >
-          + Nuevo producto
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={handleDescargarPlantilla}
+            className="border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold px-4 py-2 rounded-full text-sm transition"
+          >
+            Descargar plantilla Excel
+          </button>
+          <label className="cursor-pointer border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold px-4 py-2 rounded-full text-sm transition">
+            Cargar Excel
+            <input
+              ref={inputExcelRef}
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={handleSeleccionarExcel}
+              className="sr-only"
+            />
+          </label>
+          <button
+            onClick={abrirNuevo}
+            className="bg-primario hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-full text-sm transition"
+          >
+            + Nuevo producto
+          </button>
+        </div>
       </div>
+
+      {/* Resultado de la última importación */}
+      {resultadoImport && (
+        <div className="mb-4 bg-green-50 border border-green-200 rounded-2xl px-4 py-3 flex items-start justify-between gap-3">
+          <p className="text-sm text-green-800">
+            ✅ Se crearon <strong>{resultadoImport.creados}</strong> producto(s) desde el Excel.
+            {resultadoImport.fallidos.length > 0 && (
+              <span className="block text-red-600 mt-1">
+                {resultadoImport.fallidos.length} fila(s) fallaron al guardar: {resultadoImport.fallidos.map((f) => f.nombre).join(', ')}
+              </span>
+            )}
+          </p>
+          <button onClick={() => setResultadoImport(null)} className="text-green-700 hover:text-green-900 shrink-0">✕</button>
+        </div>
+      )}
 
       {/* Filtros */}
       <div className="mb-4 flex flex-col sm:flex-row gap-3">
@@ -230,6 +295,66 @@ export default function Productos() {
           onEliminar={(id) => handleEliminar(id)}
           guardando={guardando}
         />
+      )}
+
+      {/* Previsualización de carga masiva */}
+      {previaImport && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between px-5 py-4 border-b shrink-0">
+              <h2 className="font-display font-bold text-lg">Confirmar carga masiva</h2>
+              <button onClick={() => setPreviaImport(null)} className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full text-gray-500">✕</button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+              <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+                <p className="text-sm text-green-800 font-semibold">
+                  {previaImport.validos.length} producto(s) listos para crear
+                </p>
+              </div>
+
+              {previaImport.validos.length > 0 && (
+                <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                  {previaImport.validos.map((p, i) => (
+                    <div key={i} className="flex items-center justify-between text-sm bg-gray-50 rounded-lg px-3 py-2">
+                      <span className="font-medium text-gray-800 truncate">{p.nombre}</span>
+                      <span className="text-gray-500 shrink-0 ml-2">{formatPrecio(p.precio)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {previaImport.errores.length > 0 && (
+                <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                  <p className="text-sm text-red-700 font-semibold mb-2">
+                    {previaImport.errores.length} fila(s) con error (no se crearán)
+                  </p>
+                  <div className="space-y-1 max-h-32 overflow-y-auto">
+                    {previaImport.errores.map((e, i) => (
+                      <p key={i} className="text-xs text-red-600">Fila {e.fila}: {e.motivo}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="shrink-0 border-t px-5 py-4 flex gap-2">
+              <button
+                onClick={() => setPreviaImport(null)}
+                className="flex-1 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition text-sm"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmarImport}
+                disabled={importando || previaImport.validos.length === 0}
+                className="flex-1 bg-primario hover:bg-green-700 text-white font-bold py-2.5 rounded-full transition disabled:opacity-50 text-sm"
+              >
+                {importando ? 'Creando…' : `Crear ${previaImport.validos.length} producto(s)`}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
