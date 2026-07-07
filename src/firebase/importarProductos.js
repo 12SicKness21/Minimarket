@@ -1,5 +1,9 @@
 import * as XLSX from 'xlsx';
-import { crearProducto } from './productos';
+import { crearProducto, actualizarProducto } from './productos';
+
+function normalizarNombre(nombre) {
+  return nombre.trim().toLowerCase();
+}
 
 const COLUMNAS = ['Nombre', 'Descripcion', 'Precio', 'Categoria', 'Paises', 'ImagenUrl', 'RecienLlegado', 'Activo'];
 
@@ -55,7 +59,7 @@ export function generarPlantillaExcel(categorias, paises) {
   XLSX.writeFile(libro, 'plantilla-productos.xlsx');
 }
 
-export async function leerExcelProductos(file, { categorias, paises }) {
+export async function leerExcelProductos(file, { categorias, paises, productosExistentes = [] }) {
   const buffer = await file.arrayBuffer();
   const libro = XLSX.read(buffer, { type: 'array' });
   const hoja = libro.Sheets['Productos'] || libro.Sheets[libro.SheetNames[0]];
@@ -63,6 +67,10 @@ export async function leerExcelProductos(file, { categorias, paises }) {
 
   const idsCategorias = new Set(categorias.map((c) => c.id));
   const idsPaises = new Set(paises.map((p) => p.id));
+
+  const mapaExistentes = new Map(
+    productosExistentes.map((p) => [normalizarNombre(p.nombre || ''), p])
+  );
 
   const validos = [];
   const errores = [];
@@ -90,6 +98,8 @@ export async function leerExcelProductos(file, { categorias, paises }) {
       .filter((p) => idsPaises.has(p));
     const paisesFinal = paisesInput.length > 0 ? paisesInput : ['general'];
 
+    const existente = mapaExistentes.get(normalizarNombre(nombre)) || null;
+
     validos.push({
       nombre,
       descripcion: (fila.Descripcion || '').toString().trim(),
@@ -100,25 +110,39 @@ export async function leerExcelProductos(file, { categorias, paises }) {
       recienLlegado: esSi(fila.RecienLlegado),
       activo: fila.Activo === '' ? true : esSi(fila.Activo),
       keywords: [...new Set(`${nombre} ${fila.Descripcion || ''}`.toLowerCase().split(/\s+/).filter((w) => w.length > 2))],
+      existenteId: existente?.id || null,
+      accion: existente ? 'omitir' : 'crear',
     });
   });
 
   return { validos, errores };
 }
 
-export async function crearProductosMasivo(productosValidos, onProgreso) {
+export async function procesarProductosMasivo(items, onProgreso) {
   let creados = 0;
+  let actualizados = 0;
+  let omitidos = 0;
   const fallidos = [];
+  let procesados = 0;
 
-  for (const data of productosValidos) {
+  for (const item of items) {
+    const { existenteId, accion, ...data } = item;
     try {
-      await crearProducto(data, null);
-      creados++;
+      if (accion === 'omitir') {
+        omitidos++;
+      } else if (accion === 'actualizar' && existenteId) {
+        await actualizarProducto(existenteId, data, null);
+        actualizados++;
+      } else {
+        await crearProducto(data, null);
+        creados++;
+      }
     } catch (e) {
       fallidos.push({ nombre: data.nombre, motivo: e.message });
     }
-    onProgreso?.(creados + fallidos.length, productosValidos.length);
+    procesados++;
+    onProgreso?.(procesados, items.length);
   }
 
-  return { creados, fallidos };
+  return { creados, actualizados, omitidos, fallidos };
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { obtenerTodosProductos, crearProducto, actualizarProducto } from '../../firebase/productos';
-import { generarPlantillaExcel, leerExcelProductos, crearProductosMasivo } from '../../firebase/importarProductos';
+import { generarPlantillaExcel, leerExcelProductos, procesarProductosMasivo } from '../../firebase/importarProductos';
 import { formatPrecio } from '../../shared/utils/formatters';
 import { useCatalogos } from '../../shared/hooks/useCatalogos';
 import ProductoForm from '../components/ProductoForm';
@@ -104,18 +104,25 @@ export default function Productos() {
     const file = e.target.files?.[0];
     if (!file) return;
     setResultadoImport(null);
-    const { validos, errores } = await leerExcelProductos(file, { categorias, paises });
+    const { validos, errores } = await leerExcelProductos(file, { categorias, paises, productosExistentes: productos });
     setPreviaImport({ validos, errores });
     if (inputExcelRef.current) inputExcelRef.current.value = '';
+  }
+
+  function cambiarAccionFila(index, accion) {
+    setPreviaImport((prev) => ({
+      ...prev,
+      validos: prev.validos.map((p, i) => (i === index ? { ...p, accion } : p)),
+    }));
   }
 
   async function handleConfirmarImport() {
     if (!previaImport || previaImport.validos.length === 0) return;
     setImportando(true);
-    const { creados, fallidos } = await crearProductosMasivo(previaImport.validos);
+    const { creados, actualizados, omitidos, fallidos } = await procesarProductosMasivo(previaImport.validos);
     setImportando(false);
     setPreviaImport(null);
-    setResultadoImport({ creados, fallidos });
+    setResultadoImport({ creados, actualizados, omitidos, fallidos });
     cargar();
   }
 
@@ -153,7 +160,8 @@ export default function Productos() {
       {resultadoImport && (
         <div className="mb-4 bg-green-50 border border-green-200 rounded-2xl px-4 py-3 flex items-start justify-between gap-3">
           <p className="text-sm text-green-800">
-            ✅ Se crearon <strong>{resultadoImport.creados}</strong> producto(s) desde el Excel.
+            ✅ {resultadoImport.creados} creado(s), {resultadoImport.actualizados} actualizado(s)
+            {resultadoImport.omitidos > 0 && `, ${resultadoImport.omitidos} omitido(s)`}.
             {resultadoImport.fallidos.length > 0 && (
               <span className="block text-red-600 mt-1">
                 {resultadoImport.fallidos.length} fila(s) fallaron al guardar: {resultadoImport.fallidos.map((f) => f.nombre).join(', ')}
@@ -309,16 +317,54 @@ export default function Productos() {
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
               <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3">
                 <p className="text-sm text-green-800 font-semibold">
-                  {previaImport.validos.length} producto(s) listos para crear
+                  {previaImport.validos.length} fila(s) listas para procesar
+                  {previaImport.validos.some((p) => p.existenteId) && (
+                    <span className="block font-normal text-green-700 mt-0.5">
+                      Algunos nombres ya existen en el catálogo — elige qué hacer con cada uno.
+                    </span>
+                  )}
                 </p>
               </div>
 
               {previaImport.validos.length > 0 && (
-                <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                <div className="space-y-1.5 max-h-64 overflow-y-auto">
                   {previaImport.validos.map((p, i) => (
-                    <div key={i} className="flex items-center justify-between text-sm bg-gray-50 rounded-lg px-3 py-2">
-                      <span className="font-medium text-gray-800 truncate">{p.nombre}</span>
-                      <span className="text-gray-500 shrink-0 ml-2">{formatPrecio(p.precio)}</span>
+                    <div key={i} className="bg-gray-50 rounded-lg px-3 py-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium text-gray-800 truncate flex items-center gap-1.5">
+                          {p.nombre}
+                          {p.existenteId && (
+                            <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded-full shrink-0">
+                              Ya existe
+                            </span>
+                          )}
+                        </span>
+                        <span className="text-gray-500 shrink-0 ml-2">{formatPrecio(p.precio)}</span>
+                      </div>
+                      {p.existenteId && (
+                        <div className="flex items-center gap-3 mt-1.5">
+                          <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+                            <input
+                              type="radio"
+                              name={`accion-${i}`}
+                              checked={p.accion === 'omitir'}
+                              onChange={() => cambiarAccionFila(i, 'omitir')}
+                              className="accent-primario"
+                            />
+                            Omitir (no tocar el existente)
+                          </label>
+                          <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+                            <input
+                              type="radio"
+                              name={`accion-${i}`}
+                              checked={p.accion === 'actualizar'}
+                              onChange={() => cambiarAccionFila(i, 'actualizar')}
+                              className="accent-primario"
+                            />
+                            Actualizar producto existente
+                          </label>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -350,7 +396,7 @@ export default function Productos() {
                 disabled={importando || previaImport.validos.length === 0}
                 className="flex-1 bg-primario hover:bg-green-700 text-white font-bold py-2.5 rounded-full transition disabled:opacity-50 text-sm"
               >
-                {importando ? 'Creando…' : `Crear ${previaImport.validos.length} producto(s)`}
+                {importando ? 'Procesando…' : `Procesar ${previaImport.validos.length} fila(s)`}
               </button>
             </div>
           </div>
