@@ -107,7 +107,7 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
               value={form.nombre}
               onChange={handleChange}
               required
-              placeholder="Ej: Cerveza Guinness lata 44cl"
+              placeholder="Nombre de producto..."
               className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
             />
           </div>
@@ -166,22 +166,43 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
 
           {/* Países */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Países</label>
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-              {paises.map((p) => (
-                <label
-                  key={p.id}
-                  className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer transition border select-none ${form.paises.includes(p.id)
-                      ? 'border-primario bg-green-50 text-primario font-medium'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
-                    }`}
-                >
-                  <input type="checkbox" checked={form.paises.includes(p.id)} onChange={() => togglePais(p.id)} className="sr-only" />
-                  {p.bandera && <span>{p.bandera}</span>}
-                  <span>{p.nombre}</span>
-                </label>
-              ))}
-            </div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Países</label>
+            <select
+              value=""
+              onChange={(e) => { if (e.target.value) togglePais(e.target.value); }}
+              className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            >
+              <option value="">+ Agregar país</option>
+              {paises
+                .filter((p) => !form.paises.includes(p.id))
+                .map((p) => (
+                  <option key={p.id} value={p.id}>{p.bandera ? `${p.bandera} ` : ''}{p.nombre}</option>
+                ))}
+            </select>
+
+            {form.paises.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {form.paises.map((paisId) => {
+                  const p = paises.find((x) => x.id === paisId);
+                  return (
+                    <span
+                      key={paisId}
+                      className="flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full text-sm border border-primario bg-green-50 text-primario font-medium"
+                    >
+                      {p?.bandera && <span>{p.bandera}</span>}
+                      <span>{p?.nombre || paisId}</span>
+                      <button
+                        type="button"
+                        onClick={() => togglePais(paisId)}
+                        className="w-4 h-4 flex items-center justify-center rounded-full hover:bg-primario/20 transition"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Imagen */}

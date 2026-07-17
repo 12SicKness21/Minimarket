@@ -22,12 +22,12 @@ function esSi(valor) {
 
 export function generarPlantillaExcel(categorias, paises) {
   const ejemplo = {
-    Nombre: 'Harina P.A.N. 1kg',
-    Descripcion: 'Harina de maíz precocida para arepas',
+    Nombre: 'Cerveza Guinness lata 44cl',
+    Descripcion: 'Descripción breve del producto',
     Precio: 2.5,
-    Categoria: categorias[0]?.id || 'otros',
-    Paises: paises[0]?.id || 'general',
-    ImagenArchivo: 'harina-pan.jpg',
+    Categoria: 'bebidas',
+    Paises: 'mundo',
+    ImagenArchivo: 'guinness.webp',
     ImagenUrl: '',
     RecienLlegado: 'NO',
     Activo: 'SI',
