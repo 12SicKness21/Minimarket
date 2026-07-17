@@ -83,7 +83,7 @@ export async function obtenerTodosProductos() {
 export async function crearProducto(data, imagenFile) {
   const docRef = await addDoc(collection(db, COLECCION), {
     ...data,
-    imagenUrl: '',
+    imagenUrl: data.imagenUrl || '',
     sku: generarSKU(data.categoria),
     creadoEn: serverTimestamp(),
     actualizadoEn: serverTimestamp(),

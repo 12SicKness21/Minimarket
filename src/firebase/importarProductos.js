@@ -5,7 +5,15 @@ function normalizarNombre(nombre) {
   return nombre.trim().toLowerCase();
 }
 
-const COLUMNAS = ['Nombre', 'Descripcion', 'Precio', 'Categoria', 'Paises', 'ImagenUrl', 'RecienLlegado', 'Activo'];
+const COLUMNAS = ['Nombre', 'Descripcion', 'Precio', 'Categoria', 'Paises', 'ImagenArchivo', 'ImagenUrl', 'RecienLlegado', 'Activo'];
+
+export function construirMapaImagenes(fileList) {
+  const mapa = new Map();
+  Array.from(fileList || []).forEach((file) => {
+    mapa.set(file.name.trim().toLowerCase(), file);
+  });
+  return mapa;
+}
 
 function esSi(valor) {
   const v = (valor ?? '').toString().trim().toLowerCase();
@@ -19,6 +27,7 @@ export function generarPlantillaExcel(categorias, paises) {
     Precio: 2.5,
     Categoria: categorias[0]?.id || 'otros',
     Paises: paises[0]?.id || 'general',
+    ImagenArchivo: 'harina-pan.jpg',
     ImagenUrl: '',
     RecienLlegado: 'NO',
     Activo: 'SI',
@@ -26,8 +35,8 @@ export function generarPlantillaExcel(categorias, paises) {
 
   const hojaProductos = XLSX.utils.json_to_sheet([ejemplo], { header: COLUMNAS });
   hojaProductos['!cols'] = [
-    { wch: 28 }, { wch: 36 }, { wch: 10 }, { wch: 14 },
-    { wch: 24 }, { wch: 30 }, { wch: 14 }, { wch: 10 },
+    { wch: 28 }, { wch: 36 }, { wch: 10 }, { wch: 14 }, { wch: 24 },
+    { wch: 22 }, { wch: 30 }, { wch: 14 }, { wch: 10 },
   ];
 
   const filasCategorias = categorias.map((c) => ({ ID: c.id, Nombre: c.label }));
@@ -43,7 +52,9 @@ export function generarPlantillaExcel(categorias, paises) {
     { Instrucciones: 'Nombre y Precio son obligatorios.' },
     { Instrucciones: 'Categoria debe ser uno de los ID listados en la hoja "Categorías".' },
     { Instrucciones: 'Paises acepta varios ID separados por coma, ej: venezuela,general (ver hoja "Países").' },
-    { Instrucciones: 'ImagenUrl es opcional — si se deja vacío se usará una imagen por defecto.' },
+    { Instrucciones: 'ImagenArchivo: nombre exacto del archivo de foto, ej: harina-pan.jpg. Selecciona la carpeta con esas fotos al cargar el Excel en el panel.' },
+    { Instrucciones: 'ImagenUrl: alternativa si ya tienes la foto publicada en una URL (se usa solo si ImagenArchivo está vacío o no se encuentra).' },
+    { Instrucciones: 'Si ambas quedan vacías o no se encuentra el archivo, se usará una imagen por defecto.' },
     { Instrucciones: 'RecienLlegado y Activo se escriben como SI o NO.' },
     { Instrucciones: 'No agregues ni borres columnas de la hoja "Productos".' },
   ];
@@ -59,7 +70,7 @@ export function generarPlantillaExcel(categorias, paises) {
   XLSX.writeFile(libro, 'plantilla-productos.xlsx');
 }
 
-export async function leerExcelProductos(file, { categorias, paises, productosExistentes = [] }) {
+export async function leerExcelProductos(file, { categorias, paises, productosExistentes = [], mapaImagenes = new Map() }) {
   const buffer = await file.arrayBuffer();
   const libro = XLSX.read(buffer, { type: 'array' });
   const hoja = libro.Sheets['Productos'] || libro.Sheets[libro.SheetNames[0]];
@@ -100,6 +111,11 @@ export async function leerExcelProductos(file, { categorias, paises, productosEx
 
     const existente = mapaExistentes.get(normalizarNombre(nombre)) || null;
 
+    const imagenArchivoNombre = (fila.ImagenArchivo || '').toString().trim();
+    const archivoEncontrado = imagenArchivoNombre
+      ? mapaImagenes.get(imagenArchivoNombre.toLowerCase()) || null
+      : null;
+
     validos.push({
       nombre,
       descripcion: (fila.Descripcion || '').toString().trim(),
@@ -112,6 +128,9 @@ export async function leerExcelProductos(file, { categorias, paises, productosEx
       keywords: [...new Set(`${nombre} ${fila.Descripcion || ''}`.toLowerCase().split(/\s+/).filter((w) => w.length > 2))],
       existenteId: existente?.id || null,
       accion: existente ? 'omitir' : 'crear',
+      imagenArchivoNombre: imagenArchivoNombre || null,
+      imagenArchivoEncontrado: !!archivoEncontrado,
+      _imagenFile: archivoEncontrado,
     });
   });
 
@@ -126,15 +145,15 @@ export async function procesarProductosMasivo(items, onProgreso) {
   let procesados = 0;
 
   for (const item of items) {
-    const { existenteId, accion, ...data } = item;
+    const { existenteId, accion, _imagenFile, imagenArchivoNombre, imagenArchivoEncontrado, ...data } = item;
     try {
       if (accion === 'omitir') {
         omitidos++;
       } else if (accion === 'actualizar' && existenteId) {
-        await actualizarProducto(existenteId, data, null);
+        await actualizarProducto(existenteId, data, _imagenFile || null);
         actualizados++;
       } else {
-        await crearProducto(data, null);
+        await crearProducto(data, _imagenFile || null);
         creados++;
       }
     } catch (e) {

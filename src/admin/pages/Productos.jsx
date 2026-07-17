@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { obtenerTodosProductos, crearProducto, actualizarProducto } from '../../firebase/productos';
-import { generarPlantillaExcel, leerExcelProductos, procesarProductosMasivo } from '../../firebase/importarProductos';
+import { generarPlantillaExcel, leerExcelProductos, procesarProductosMasivo, construirMapaImagenes } from '../../firebase/importarProductos';
 import { formatPrecio } from '../../shared/utils/formatters';
 import { useCatalogos } from '../../shared/hooks/useCatalogos';
 import ProductoForm from '../components/ProductoForm';
@@ -31,7 +31,9 @@ export default function Productos() {
   const [importando, setImportando] = useState(false);
   const [resultadoImport, setResultadoImport] = useState(null);
   const [previaImport, setPreviaImport] = useState(null); // { validos, errores }
+  const [mapaImagenes, setMapaImagenes] = useState(new Map());
   const inputExcelRef = useRef(null);
+  const inputCarpetaRef = useRef(null);
 
   async function cargar() {
     setCargando(true);
@@ -100,11 +102,16 @@ export default function Productos() {
     generarPlantillaExcel(categorias, paises);
   }
 
+  function handleSeleccionarCarpeta(e) {
+    const mapa = construirMapaImagenes(e.target.files);
+    setMapaImagenes(mapa);
+  }
+
   async function handleSeleccionarExcel(e) {
     const file = e.target.files?.[0];
     if (!file) return;
     setResultadoImport(null);
-    const { validos, errores } = await leerExcelProductos(file, { categorias, paises, productosExistentes: productos });
+    const { validos, errores } = await leerExcelProductos(file, { categorias, paises, productosExistentes: productos, mapaImagenes });
     setPreviaImport({ validos, errores });
     if (inputExcelRef.current) inputExcelRef.current.value = '';
   }
@@ -123,6 +130,8 @@ export default function Productos() {
     setImportando(false);
     setPreviaImport(null);
     setResultadoImport({ creados, actualizados, omitidos, fallidos });
+    setMapaImagenes(new Map());
+    if (inputCarpetaRef.current) inputCarpetaRef.current.value = '';
     cargar();
   }
 
@@ -137,6 +146,19 @@ export default function Productos() {
           >
             Descargar plantilla Excel
           </button>
+          <label className="cursor-pointer border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold px-4 py-2 rounded-full text-sm transition">
+            {mapaImagenes.size > 0 ? `📷 ${mapaImagenes.size} imagen(es)` : 'Seleccionar imágenes'}
+            <input
+              ref={inputCarpetaRef}
+              type="file"
+              accept="image/*"
+              multiple
+              webkitdirectory=""
+              directory=""
+              onChange={handleSeleccionarCarpeta}
+              className="sr-only"
+            />
+          </label>
           <label className="cursor-pointer border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold px-4 py-2 rounded-full text-sm transition">
             Cargar Excel
             <input
@@ -341,6 +363,13 @@ export default function Productos() {
                         </span>
                         <span className="text-gray-500 shrink-0 ml-2">{formatPrecio(p.precio)}</span>
                       </div>
+                      {p.imagenArchivoNombre && (
+                        <p className={`text-xs mt-1 ${p.imagenArchivoEncontrado ? 'text-green-600' : 'text-amber-600'}`}>
+                          {p.imagenArchivoEncontrado
+                            ? `📷 ${p.imagenArchivoNombre} encontrada`
+                            : `⚠️ ${p.imagenArchivoNombre} no encontrada en la carpeta seleccionada`}
+                        </p>
+                      )}
                       {p.existenteId && (
                         <div className="flex items-center gap-3 mt-1.5">
                           <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
