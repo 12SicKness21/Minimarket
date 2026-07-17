@@ -107,7 +107,7 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
               value={form.nombre}
               onChange={handleChange}
               required
-              placeholder="Ej: Harina P.A.N. 1kg"
+              placeholder="Ej: Cerveza Guinness lata 44cl"
               className="w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
             />
           </div>
@@ -171,11 +171,10 @@ export default function ProductoForm({ producto, onGuardar, onCerrar, onEliminar
               {paises.map((p) => (
                 <label
                   key={p.id}
-                  className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer transition border select-none ${
-                    form.paises.includes(p.id)
+                  className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer transition border select-none ${form.paises.includes(p.id)
                       ? 'border-primario bg-green-50 text-primario font-medium'
                       : 'border-gray-200 text-gray-600 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <input type="checkbox" checked={form.paises.includes(p.id)} onChange={() => togglePais(p.id)} className="sr-only" />
                   {p.bandera && <span>{p.bandera}</span>}
