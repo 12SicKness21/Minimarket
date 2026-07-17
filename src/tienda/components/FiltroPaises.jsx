@@ -1,4 +1,5 @@
 import { useCatalogos } from '../../shared/hooks/useCatalogos';
+import BanderaPais from '../../shared/components/BanderaPais';
 
 export default function FiltroPaises({ seleccionados, onChange }) {
   const { paises } = useCatalogos();
@@ -9,21 +10,21 @@ export default function FiltroPaises({ seleccionados, onChange }) {
   }
 
   return (
-    <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 snap-x">
+    <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 snap-x">
       {paises.map((pais) => {
         const activo = seleccionados.includes(pais.id);
         return (
           <button
             key={pais.id}
             onClick={() => togglePais(pais.id)}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap transition snap-start ${
-              activo
-                ? 'bg-primario text-white shadow-sm'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            className={`shrink-0 flex flex-col items-center gap-1 px-1 pt-1 pb-1.5 rounded-xl transition snap-start ${
+              activo ? 'ring-2 ring-primario bg-green-50' : 'hover:bg-gray-50'
             }`}
           >
-            {pais.bandera && <span className="text-base">{pais.bandera}</span>}
-            <span>{pais.nombre}</span>
+            <BanderaPais pais={pais} className="w-10 h-14 object-cover shadow-sm" />
+            <span className={`text-[11px] font-medium whitespace-nowrap ${activo ? 'text-primario' : 'text-gray-600'}`}>
+              {pais.nombre}
+            </span>
           </button>
         );
       })}

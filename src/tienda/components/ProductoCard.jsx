@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCarrito } from '../../shared/hooks/useCarrito';
 import { formatPrecio } from '../../shared/utils/formatters';
+import ProductoDetalleModal from './ProductoDetalleModal';
 
 const BANDERAS_PAIS = {
   venezuela: '🇻🇪',
@@ -16,6 +17,7 @@ const BANDERAS_PAIS = {
 export default function ProductoCard({ producto }) {
   const { agregarItem } = useCarrito();
   const [animando, setAnimando] = useState(false);
+  const [detalleAbierto, setDetalleAbierto] = useState(false);
 
   function handleAnadir() {
     agregarItem(producto);
@@ -30,8 +32,11 @@ export default function ProductoCard({ producto }) {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col">
-      {/* Imagen */}
-      <div className="aspect-square bg-gray-50 relative overflow-hidden">
+      {/* Imagen — toca para ver detalle ampliado */}
+      <button
+        onClick={() => setDetalleAbierto(true)}
+        className="aspect-square bg-gray-50 relative overflow-hidden w-full"
+      >
         <img
           src={producto.imagenUrl || '/icon.png'}
           alt={producto.nombre}
@@ -45,7 +50,12 @@ export default function ProductoCard({ producto }) {
             Nuevo
           </span>
         )}
-      </div>
+        <span className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
+          </svg>
+        </span>
+      </button>
 
       {/* Info */}
       <div className="p-3 flex flex-col flex-1">
@@ -84,6 +94,14 @@ export default function ProductoCard({ producto }) {
           </button>
         </div>
       </div>
+
+      {detalleAbierto && (
+        <ProductoDetalleModal
+          producto={producto}
+          onCerrar={() => setDetalleAbierto(false)}
+          onAgregar={handleAnadir}
+        />
+      )}
     </div>
   );
 }
