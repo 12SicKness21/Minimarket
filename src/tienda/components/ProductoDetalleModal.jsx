@@ -57,7 +57,7 @@ export default function ProductoDetalleModal({ producto, onCerrar, onAgregar }) 
           {paisesProducto.length > 0 && (
             <div className="flex items-center gap-2 flex-wrap">
               {paisesProducto.map((p) => (
-                <BanderaPais key={p.id} pais={p} className="w-6 h-8 rounded" />
+                <BanderaPais key={p.id} pais={p} className="w-9 h-6 rounded" />
               ))}
             </div>
           )}

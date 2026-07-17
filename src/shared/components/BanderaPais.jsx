@@ -1,4 +1,7 @@
-// Proporción vertical compartida con HeroBanderas (9:16 escalado)
+// W,H por defecto = proporción vertical usada por HeroBanderas (9:16 escalado).
+// Cada función acepta {w,h} para poder dibujarse también en formato apaisado
+// (como en los filtros de país) sin recortar el diseño — todas las medidas
+// internas son fracciones de w/h, así que se adaptan a cualquier proporción.
 export const W = 390;
 export const H = 844;
 
@@ -13,48 +16,48 @@ export function star5(x, y, r) {
   return d + 'Z';
 }
 
-export function FlagPeru() {
+export function FlagPeru({ w = W, h = H }) {
   return (
     <g>
-      <rect x={0} y={0} width={W / 3} height={H} fill="#D91023" />
-      <rect x={W / 3} y={0} width={W / 3} height={H} fill="#FFFFFF" />
-      <rect x={W * 2 / 3} y={0} width={W / 3} height={H} fill="#D91023" />
+      <rect x={0} y={0} width={w / 3} height={h} fill="#D91023" />
+      <rect x={w / 3} y={0} width={w / 3} height={h} fill="#FFFFFF" />
+      <rect x={w * 2 / 3} y={0} width={w / 3} height={h} fill="#D91023" />
     </g>
   );
 }
 
-export function FlagRepDominicana() {
-  const cw = W * 0.12;
-  const ch = H * 0.055;
+export function FlagRepDominicana({ w = W, h = H }) {
+  const cw = w * 0.12;
+  const ch = h * 0.09;
   return (
     <g>
-      <rect x={0} y={0} width={W / 2} height={H / 2} fill="#002D62" />
-      <rect x={W / 2} y={0} width={W / 2} height={H / 2} fill="#CE1126" />
-      <rect x={0} y={H / 2} width={W / 2} height={H / 2} fill="#CE1126" />
-      <rect x={W / 2} y={H / 2} width={W / 2} height={H / 2} fill="#002D62" />
-      <rect x={(W - cw) / 2} y={0} width={cw} height={H} fill="#FFFFFF" />
-      <rect x={0} y={(H - ch) / 2} width={W} height={ch} fill="#FFFFFF" />
+      <rect x={0} y={0} width={w / 2} height={h / 2} fill="#002D62" />
+      <rect x={w / 2} y={0} width={w / 2} height={h / 2} fill="#CE1126" />
+      <rect x={0} y={h / 2} width={w / 2} height={h / 2} fill="#CE1126" />
+      <rect x={w / 2} y={h / 2} width={w / 2} height={h / 2} fill="#002D62" />
+      <rect x={(w - cw) / 2} y={0} width={cw} height={h} fill="#FFFFFF" />
+      <rect x={0} y={(h - ch) / 2} width={w} height={ch} fill="#FFFFFF" />
     </g>
   );
 }
 
-export function FlagColombia() {
+export function FlagColombia({ w = W, h = H }) {
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 2} fill="#FCD116" />
-      <rect x={0} y={H / 2} width={W} height={H / 4} fill="#003087" />
-      <rect x={0} y={H * 0.75} width={W} height={H / 4} fill="#CE1126" />
+      <rect x={0} y={0} width={w} height={h / 2} fill="#FCD116" />
+      <rect x={0} y={h / 2} width={w} height={h / 4} fill="#003087" />
+      <rect x={0} y={h * 0.75} width={w} height={h / 4} fill="#CE1126" />
     </g>
   );
 }
 
-export function FlagArgentina() {
-  const cx = W / 2, cy = H / 2, sr = W * 0.12;
+export function FlagArgentina({ w = W, h = H }) {
+  const cx = w / 2, cy = h / 2, sr = Math.min(w, h) * 0.2;
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 3} fill="#74ACDF" />
-      <rect x={0} y={H / 3} width={W} height={H / 3} fill="#FFFFFF" />
-      <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#74ACDF" />
+      <rect x={0} y={0} width={w} height={h / 3} fill="#74ACDF" />
+      <rect x={0} y={h / 3} width={w} height={h / 3} fill="#FFFFFF" />
+      <rect x={0} y={h * 2 / 3} width={w} height={h / 3} fill="#74ACDF" />
       <g transform={'translate(' + cx + ',' + cy + ')'}>
         {Array.from({ length: 16 }, (_, i) => (
           <rect
@@ -77,13 +80,13 @@ export function FlagArgentina() {
   );
 }
 
-export function FlagVenezuela() {
-  const cx = W / 2, cy = H / 2, arcR = W * 0.18, starR = W * 0.045;
+export function FlagVenezuela({ w = W, h = H }) {
+  const cx = w / 2, cy = h / 2, arcR = Math.min(w, h) * 0.28, starR = Math.min(w, h) * 0.07;
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 3} fill="#CF8B00" />
-      <rect x={0} y={H / 3} width={W} height={H / 3} fill="#00247D" />
-      <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#CF0A2C" />
+      <rect x={0} y={0} width={w} height={h / 3} fill="#CF8B00" />
+      <rect x={0} y={h / 3} width={w} height={h / 3} fill="#00247D" />
+      <rect x={0} y={h * 2 / 3} width={w} height={h / 3} fill="#CF0A2C" />
       {Array.from({ length: 8 }, (_, i) => {
         const a = (i / 8) * Math.PI * 2 - Math.PI / 2;
         return (
@@ -98,35 +101,35 @@ export function FlagVenezuela() {
   );
 }
 
-export function FlagElSalvador() {
-  const cx = W / 2, cy = H / 2;
+export function FlagElSalvador({ w = W, h = H }) {
+  const cx = w / 2, cy = h / 2, u = Math.min(w, h);
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 3} fill="#0F47AF" />
-      <rect x={0} y={H / 3} width={W} height={H / 3} fill="#FFFFFF" />
-      <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#0F47AF" />
+      <rect x={0} y={0} width={w} height={h / 3} fill="#0F47AF" />
+      <rect x={0} y={h / 3} width={w} height={h / 3} fill="#FFFFFF" />
+      <rect x={0} y={h * 2 / 3} width={w} height={h / 3} fill="#0F47AF" />
       <g transform={'translate(' + cx + ',' + cy + ')'}>
-        <path d={'M0,' + (-W * 0.13) + ' L' + (W * 0.15) + ',' + (W * 0.1) + ' L' + (-W * 0.15) + ',' + (W * 0.1) + ' Z'}
-          fill="none" stroke="#0F47AF" strokeWidth={3} />
-        <rect x={-W * 0.115} y={W * 0.04} width={W * 0.23} height={W * 0.018} fill="#0F47AF" />
-        <rect x={-W * 0.115} y={W * 0.06} width={W * 0.23} height={W * 0.018} fill="#CE1126" />
-        <circle r={W * 0.03} cy={-W * 0.02} fill="#FFD100" stroke="#0F47AF" strokeWidth={1.5} />
+        <path d={'M0,' + (-u * 0.22) + ' L' + (u * 0.25) + ',' + (u * 0.16) + ' L' + (-u * 0.25) + ',' + (u * 0.16) + ' Z'}
+          fill="none" stroke="#0F47AF" strokeWidth={2} />
+        <rect x={-u * 0.19} y={u * 0.06} width={u * 0.38} height={u * 0.03} fill="#0F47AF" />
+        <rect x={-u * 0.19} y={u * 0.1} width={u * 0.38} height={u * 0.03} fill="#CE1126" />
+        <circle r={u * 0.05} cy={-u * 0.04} fill="#FFD100" stroke="#0F47AF" strokeWidth={1} />
       </g>
     </g>
   );
 }
 
-export function FlagHonduras() {
-  const cx = W / 2, cy = H / 2, sr = W * 0.035, sp = W * 0.13;
+export function FlagHonduras({ w = W, h = H }) {
+  const cx = w / 2, cy = h / 2, u = Math.min(w, h), sr = u * 0.06, sp = u * 0.22;
   const estrellas = [
     [cx, cy], [cx - sp, cy - sp], [cx + sp, cy - sp],
     [cx - sp, cy + sp], [cx + sp, cy + sp],
   ];
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 3} fill="#0073CF" />
-      <rect x={0} y={H / 3} width={W} height={H / 3} fill="#FFFFFF" />
-      <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#0073CF" />
+      <rect x={0} y={0} width={w} height={h / 3} fill="#0073CF" />
+      <rect x={0} y={h / 3} width={w} height={h / 3} fill="#FFFFFF" />
+      <rect x={0} y={h * 2 / 3} width={w} height={h / 3} fill="#0073CF" />
       {estrellas.map(([x, y], i) => (
         <path key={i} d={star5(x, y, sr)} fill="#0073CF" />
       ))}
@@ -134,47 +137,47 @@ export function FlagHonduras() {
   );
 }
 
-export function FlagEcuador() {
+export function FlagEcuador({ w = W, h = H }) {
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 2} fill="#FFD100" />
-      <rect x={0} y={H / 2} width={W} height={H / 4} fill="#034EA2" />
-      <rect x={0} y={H * 0.75} width={W} height={H / 4} fill="#EF3340" />
+      <rect x={0} y={0} width={w} height={h / 2} fill="#FFD100" />
+      <rect x={0} y={h / 2} width={w} height={h / 4} fill="#034EA2" />
+      <rect x={0} y={h * 0.75} width={w} height={h / 4} fill="#EF3340" />
     </g>
   );
 }
 
-export function FlagBolivia() {
+export function FlagBolivia({ w = W, h = H }) {
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 3} fill="#D52B1E" />
-      <rect x={0} y={H / 3} width={W} height={H / 3} fill="#F4E400" />
-      <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#007A33" />
+      <rect x={0} y={0} width={w} height={h / 3} fill="#D52B1E" />
+      <rect x={0} y={h / 3} width={w} height={h / 3} fill="#F4E400" />
+      <rect x={0} y={h * 2 / 3} width={w} height={h / 3} fill="#007A33" />
     </g>
   );
 }
 
-export function FlagParaguay() {
+export function FlagParaguay({ w = W, h = H }) {
   return (
     <g>
-      <rect x={0} y={0} width={W} height={H / 3} fill="#D52B1E" />
-      <rect x={0} y={H / 3} width={W} height={H / 3} fill="#FFFFFF" />
-      <rect x={0} y={H * 2 / 3} width={W} height={H / 3} fill="#0038A8" />
+      <rect x={0} y={0} width={w} height={h / 3} fill="#D52B1E" />
+      <rect x={0} y={h / 3} width={w} height={h / 3} fill="#FFFFFF" />
+      <rect x={0} y={h * 2 / 3} width={w} height={h / 3} fill="#0038A8" />
     </g>
   );
 }
 
-export function FlagCuba() {
-  const franja = H / 5;
-  const cx = W * 0.18, cy = H / 2, starR = W * 0.055;
+export function FlagCuba({ w = W, h = H }) {
+  const franja = h / 5;
+  const cx = w * 0.18, cy = h / 2, starR = Math.min(w, h) * 0.09;
   return (
     <g>
-      <rect x={0} y={0} width={W} height={franja} fill="#002A8F" />
-      <rect x={0} y={franja} width={W} height={franja} fill="#FFFFFF" />
-      <rect x={0} y={franja * 2} width={W} height={franja} fill="#002A8F" />
-      <rect x={0} y={franja * 3} width={W} height={franja} fill="#FFFFFF" />
-      <rect x={0} y={franja * 4} width={W} height={franja} fill="#002A8F" />
-      <path d={`M0,0 L${W * 0.42},${H / 2} L0,${H} Z`} fill="#CB1515" />
+      <rect x={0} y={0} width={w} height={franja} fill="#002A8F" />
+      <rect x={0} y={franja} width={w} height={franja} fill="#FFFFFF" />
+      <rect x={0} y={franja * 2} width={w} height={franja} fill="#002A8F" />
+      <rect x={0} y={franja * 3} width={w} height={franja} fill="#FFFFFF" />
+      <rect x={0} y={franja * 4} width={w} height={franja} fill="#002A8F" />
+      <path d={`M0,0 L${w * 0.42},${h / 2} L0,${h} Z`} fill="#CB1515" />
       <path d={star5(cx, cy, starR)} fill="#FFFFFF" />
     </g>
   );
@@ -194,7 +197,11 @@ export const COMPONENTES_BANDERA = {
   cuba: FlagCuba,
 };
 
-export default function BanderaPais({ pais, className = 'w-10 h-14' }) {
+// Proporción apaisada estándar de bandera (3:2) para chips/filtros
+const W_CHIP = 300;
+const H_CHIP = 200;
+
+export default function BanderaPais({ pais, className = 'w-14 h-10' }) {
   const Componente = COMPONENTES_BANDERA[pais.id];
 
   if (!Componente) {
@@ -206,8 +213,8 @@ export default function BanderaPais({ pais, className = 'w-10 h-14' }) {
   }
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className={`${className} rounded-md shrink-0`}>
-      <Componente />
+    <svg viewBox={`0 0 ${W_CHIP} ${H_CHIP}`} className={`${className} rounded-md shrink-0`}>
+      <Componente w={W_CHIP} h={H_CHIP} />
     </svg>
   );
 }

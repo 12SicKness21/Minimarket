@@ -21,7 +21,7 @@ export default function FiltroPaises({ seleccionados, onChange }) {
               activo ? 'ring-2 ring-primario bg-green-50' : 'hover:bg-gray-50'
             }`}
           >
-            <BanderaPais pais={pais} className="w-10 h-14 object-cover shadow-sm" />
+            <BanderaPais pais={pais} className="w-16 h-11 shadow-sm" />
             <span className={`text-[11px] font-medium whitespace-nowrap ${activo ? 'text-primario' : 'text-gray-600'}`}>
               {pais.nombre}
             </span>
