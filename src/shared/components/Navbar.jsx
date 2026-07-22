@@ -5,6 +5,7 @@ import { obtenerCatalogos } from '../../firebase/catalogos';
 import { obtenerConfigTienda, obtenerServicios } from '../../firebase/config-tienda';
 import GaleriaLocal from '../../tienda/components/GaleriaLocal';
 import HistorialPedidos from '../../tienda/components/HistorialPedidos';
+import BanderaPais from './BanderaPais';
 
 function generarLinkWhatsApp(numero) {
   const limpio = (numero || '').replace(/\D/g, '');
@@ -87,23 +88,20 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
+      <nav className="sticky top-0 z-50 shadow-sm" style={{ backgroundColor: '#b5d99c' }}>
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
 
           {/* Izquierda — hamburguesa */}
           <div className={`flex items-center gap-2 shrink-0 ${buscadorAbierto ? 'hidden sm:flex' : 'flex'}`}>
             <button
               onClick={() => setMenuAbierto(true)}
-              className="p-2 rounded-full hover:bg-gray-100 transition"
+              className="p-2 rounded-full hover:bg-white/20 transition"
               aria-label="Menú"
             >
-              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <Link to="/" className="hidden sm:block">
-              <img src="/icon.png" alt="logo" className="w-8 h-8 object-contain" />
-            </Link>
           </div>
 
           {/* Centro — MINI MARKET */}
@@ -111,8 +109,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
             to="/"
             className={`flex items-center gap-2 absolute left-1/2 -translate-x-1/2 ${buscadorAbierto ? 'hidden sm:flex' : 'flex'}`}
           >
-            <img src="/icon.png" alt="logo" className="w-7 h-7 object-contain sm:hidden" />
-            <span style={{ fontFamily: 'Boogaloo, cursive', color: '#93C572', fontSize: '1.5rem', lineHeight: 1 }}>
+            <span style={{ fontFamily: 'Boogaloo, cursive', color: '#FFFFFF', fontSize: '1.5rem', lineHeight: 1 }}>
               MINI MARKET
             </span>
           </Link>
@@ -125,7 +122,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder="Buscar productos..."
-                className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario transition"
+                className="w-full pl-10 pr-4 py-2 rounded-full border border-white/40 bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white transition"
               />
               <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -143,11 +140,11 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
                   placeholder="Buscar productos..."
-                  className="w-full pl-4 pr-4 py-2.5 rounded-full border border-primario bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-primario/30 transition"
+                  className="w-full pl-4 pr-4 py-2.5 rounded-full border border-white bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 transition"
                 />
               </div>
               <button type="button" onClick={handleCerrarBuscador}
-                className="shrink-0 text-gray-500 font-medium text-sm px-1">
+                className="shrink-0 text-white font-medium text-sm px-1">
                 Cancelar
               </button>
             </form>
@@ -156,14 +153,14 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           {/* Derecha — lupa + carrito */}
           <div className={`flex items-center gap-1 shrink-0 ${buscadorAbierto ? 'hidden sm:flex' : 'flex'}`}>
             <button onClick={() => setBuscadorAbierto(true)}
-              className="sm:hidden p-2.5 rounded-full hover:bg-gray-100 transition" aria-label="Buscar">
-              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              className="sm:hidden p-2.5 rounded-full hover:bg-white/20 transition" aria-label="Buscar">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
             <button onClick={onAbrirCarrito}
-              className="relative p-2.5 rounded-full hover:bg-gray-100 transition" aria-label="Abrir carrito">
-              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              className="relative p-2.5 rounded-full hover:bg-white/20 transition" aria-label="Abrir carrito">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
               </svg>
               {totalItems > 0 && (
@@ -257,7 +254,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
                         onClick={() => seleccionarPais(p.id)}
                         className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:text-primario transition text-left"
                       >
-                        {p.bandera && <span className="text-xl">{p.bandera}</span>}
+                        <BanderaPais pais={p} className="w-9 h-6 rounded" />
                         <span>{p.nombre}</span>
                       </button>
                     ))}

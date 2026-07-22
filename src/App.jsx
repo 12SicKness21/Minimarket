@@ -12,7 +12,6 @@ import CarritoDrawer from './tienda/components/CarritoDrawer';
 import ToastCarrito from './shared/components/ToastCarrito';
 import BannerCerrado from './tienda/components/BannerCerrado';
 import Footer from './tienda/components/Footer';
-import BannerServicios from './tienda/components/BannerServicios';
 
 // Admin (lazy - solo se descarga al entrar a /admin)
 const Login = lazy(() => import('./admin/pages/Login'));
@@ -116,7 +115,6 @@ export default function App() {
 
       {!esAdmin && (
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <BannerServicios />
           <Footer />
         </div>
       )}

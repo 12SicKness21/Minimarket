@@ -9,6 +9,7 @@ import ProductoCard from '../components/ProductoCard';
 import HeroBanderas from '../components/HeroBanderas';
 import SeccionContacto from '../components/SeccionContacto';
 import SeccionSobreNosotros from '../components/SeccionSobreNosotros';
+import BannerServicios from '../components/BannerServicios';
 
 export default function Home({ categoria = '', setCategoria = () => {}, paisesSeleccionados = [], setPaisesSeleccionados = () => {} }) {
   const [todosProductos, setTodosProductos] = useState([]);
@@ -139,6 +140,8 @@ export default function Home({ categoria = '', setCategoria = () => {}, paisesSe
             </div>
           )}
         </section>
+
+        <BannerServicios />
 
         <SeccionSobreNosotros />
         <SeccionContacto />
