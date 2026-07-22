@@ -116,32 +116,33 @@ export default function ProductoCard({ producto }) {
           className="absolute inset-0 bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col p-3.5"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <div className="flex items-start justify-between gap-2 mb-1.5">
-            <h3 className="font-semibold text-sm text-gray-800 leading-snug flex-1">
+          <button
+            onClick={(e) => { e.stopPropagation(); setVolteada(false); }}
+            aria-label="Cerrar detalles"
+            className="absolute top-2 right-2 w-6 h-6 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-400 transition z-10"
+          >
+            ✕
+          </button>
+
+          <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 overflow-y-auto py-4">
+            <h3 className="font-bold text-lg text-gray-800 leading-snug">
               {producto.nombre}
             </h3>
-            <button
-              onClick={(e) => { e.stopPropagation(); setVolteada(false); }}
-              aria-label="Cerrar detalles"
-              className="shrink-0 w-6 h-6 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-400 transition"
-            >
-              ✕
-            </button>
+
+            {paisesProducto.length > 0 && (
+              <div className="flex items-center justify-center gap-2 flex-wrap">
+                {paisesProducto.map((p) => (
+                  <BanderaPais key={p.id} pais={p} className="w-9 h-6 rounded shadow-sm" />
+                ))}
+              </div>
+            )}
+
+            <p className="text-sm text-gray-500 leading-relaxed">
+              {producto.descripcion || 'Sin descripción disponible.'}
+            </p>
           </div>
 
-          {paisesProducto.length > 0 && (
-            <div className="flex items-center gap-1.5 flex-wrap mb-2">
-              {paisesProducto.map((p) => (
-                <BanderaPais key={p.id} pais={p} className="w-7 h-5 rounded shadow-sm" />
-              ))}
-            </div>
-          )}
-
-          <p className="text-xs text-gray-500 leading-relaxed flex-1 overflow-y-auto">
-            {producto.descripcion || 'Sin descripción disponible.'}
-          </p>
-
-          <div className="flex items-center justify-between gap-2 mt-2 pt-2.5 border-t border-gray-100">
+          <div className="flex items-center justify-between gap-2 pt-2.5 border-t border-gray-100">
             <span className="font-display font-bold text-base text-primario shrink-0">
               {formatPrecio(producto.precio)}
             </span>
