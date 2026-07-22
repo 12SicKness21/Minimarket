@@ -89,3 +89,13 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Tarjeta de producto que gira (frente/detalle) */
+.product-flip-inner {
+  transition: transform 0.6s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-flip-inner {
+    transition: none;
+  }
+}
