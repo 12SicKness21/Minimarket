@@ -4,7 +4,7 @@ export default function SeccionSobreNosotros() {
       id="sobre-nosotros"
       className="py-12 px-6"
       style={{
-        backgroundColor: '#b5d99c',
+        backgroundColor: '#BFD800',
         width: '100vw',
         position: 'relative',
         left: '50%',

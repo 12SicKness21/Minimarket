@@ -88,7 +88,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
 
   return (
     <>
-      <nav className="sticky top-0 z-50 shadow-sm" style={{ backgroundColor: '#b5d99c' }}>
+      <nav className="sticky top-0 z-50 shadow-sm" style={{ backgroundColor: '#BFD800' }}>
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
 
           {/* Izquierda — hamburguesa */}
@@ -104,14 +104,16 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
             </button>
           </div>
 
-          {/* Centro — MINI MARKET */}
+          {/* Centro — Título de la tienda */}
           <Link
             to="/"
-            className={`flex items-center gap-2 absolute left-1/2 -translate-x-1/2 ${buscadorAbierto ? 'hidden sm:flex' : 'flex'}`}
+            className={`flex items-center absolute left-1/2 -translate-x-1/2 ${buscadorAbierto ? 'hidden sm:flex' : 'flex'}`}
           >
-            <span style={{ fontFamily: 'Boogaloo, cursive', color: '#FFFFFF', fontSize: '1.5rem', lineHeight: 1 }}>
-              MINI MARKET
-            </span>
+            <img
+              src="/tienda_online_titulo.webp"
+              alt="Mini Market — Tienda online"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
 
           {/* Buscador desktop */}
@@ -203,7 +205,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="border-b border-gray-100">
             <button
               onClick={() => toggleSeccion('categorias')}
-              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm uppercase tracking-wide hover:bg-gray-50 transition"
             >
               Productos por categoría
               <svg className={`w-4 h-4 text-gray-400 transition-transform ${seccionActiva === 'categorias' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,7 +237,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="border-b border-gray-100">
             <button
               onClick={() => toggleSeccion('paises')}
-              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm uppercase tracking-wide hover:bg-gray-50 transition"
             >
               Países
               <svg className={`w-4 h-4 text-gray-400 transition-transform ${seccionActiva === 'paises' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,7 +270,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="border-b border-gray-100">
             <button
               onClick={() => toggleSeccion('contacto')}
-              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm uppercase tracking-wide hover:bg-gray-50 transition"
             >
               Contacto
               <svg className={`w-4 h-4 text-gray-400 transition-transform ${seccionActiva === 'contacto' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,7 +309,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="border-b border-gray-100">
             <button
               onClick={() => toggleSeccion('ubicacion')}
-              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm uppercase tracking-wide hover:bg-gray-50 transition"
             >
               Dónde estamos
               <svg className={`w-4 h-4 text-gray-400 transition-transform ${seccionActiva === 'ubicacion' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,7 +351,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="border-b border-gray-100">
             <button
               onClick={() => toggleSeccion('servicios')}
-              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm uppercase tracking-wide hover:bg-gray-50 transition"
             >
               Otros Servicios
               <svg className={`w-4 h-4 text-gray-400 transition-transform ${seccionActiva === 'servicios' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -388,7 +390,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="border-b border-gray-100">
             <button
               onClick={() => { cerrarMenu(); setGaleriaAbierta(true); }}
-              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm uppercase tracking-wide hover:bg-gray-50 transition"
             >
               Imágenes nuestras
               <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -401,7 +403,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="border-b border-gray-100">
             <button
               onClick={() => { cerrarMenu(); setHistorialAbierto(true); }}
-              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm hover:bg-gray-50 transition"
+              className="w-full flex items-center justify-between px-5 py-4 text-gray-800 font-semibold text-sm uppercase tracking-wide hover:bg-gray-50 transition"
             >
               <span className="flex items-center gap-2">
                 Historial de pedidos
