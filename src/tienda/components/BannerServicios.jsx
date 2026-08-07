@@ -21,10 +21,10 @@ export default function BannerServicios() {
       style={{ width: '100vw', position: 'relative', left: '50%', transform: 'translateX(-50%)' }}
     >
       {/* Etiqueta estática izquierda */}
-      <div className="shrink-0 px-4 border-r border-gray-100 flex items-center justify-center bg-white">
+      <div className="shrink-0 px-2 border-r border-gray-100 flex items-center justify-center bg-white">
         <span
           className="font-bold text-gray-500 uppercase leading-tight text-center"
-          style={{ fontSize: '10px', letterSpacing: '0.05em' }}
+          style={{ fontSize: '8px', letterSpacing: '0.03em' }}
         >
           Otros<br />Servicios
         </span>
