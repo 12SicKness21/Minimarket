@@ -69,7 +69,7 @@ export default function SeccionCondiciones() {
   ];
 
   return (
-    <section className="mb-8">
+    <section className="mb-8 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {items.map(({ icono: Icono, titulo, texto }) => (
           <div key={titulo} className="flex flex-col items-center text-center gap-2">
