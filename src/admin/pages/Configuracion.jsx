@@ -256,6 +256,39 @@ export default function Configuracion() {
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-5 space-y-5">
 
+        {/* ── Apariencia ── */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm font-semibold text-gray-700">Color de fondo de la tienda</label>
+            <button
+              type="button"
+              onClick={() => handleChange({ target: { name: 'colorFondo', type: 'text', value: '#FFF9E6' } })}
+              className="text-xs text-gray-400 hover:text-gray-600 underline transition"
+            >
+              Restaurar predeterminado
+            </button>
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="color"
+              name="colorFondo"
+              value={form.colorFondo || '#FFF9E6'}
+              onChange={handleChange}
+              className="w-12 h-10 rounded-lg border border-gray-200 cursor-pointer shrink-0"
+            />
+            <input
+              type="text"
+              value={form.colorFondo || '#FFF9E6'}
+              onChange={(e) => handleChange({ target: { name: 'colorFondo', type: 'text', value: e.target.value } })}
+              placeholder="#FFF9E6"
+              className="flex-1 px-3 py-2 border rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario"
+            />
+          </div>
+          <p className="text-xs text-gray-400 mt-1">
+            Fondo general de las páginas de la tienda (no afecta el panel de administración).
+          </p>
+        </div>
+
         {/* ── Días abierto ── */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Días abierto</label>

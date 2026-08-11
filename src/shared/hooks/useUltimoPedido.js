@@ -1,16 +1,8 @@
-const CLAVE        = 'minimarket_ultimo_pedido';
 const CLAVE_HIST   = 'minimarket_historial_pedidos';
 const MAX_HISTORIAL = 30;
 
 export function guardarUltimoPedido(items) {
-  localStorage.setItem(CLAVE, JSON.stringify(items));
-  // También añadir al historial
   agregarAlHistorial(items);
-}
-
-export function cargarUltimoPedido() {
-  const data = localStorage.getItem(CLAVE);
-  return data ? JSON.parse(data) : null;
 }
 
 // ── Historial ──────────────────────────────────────────

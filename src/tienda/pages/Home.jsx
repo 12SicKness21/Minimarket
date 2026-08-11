@@ -6,7 +6,7 @@ import SeccionCombos from '../components/SeccionCombos';
 import FiltroPaises from '../components/FiltroPaises';
 import FiltroCategoria from '../components/FiltroCategoria';
 import ProductoCard from '../components/ProductoCard';
-import HeroBanderas from '../components/HeroBanderas';
+// import HeroBanderas from '../components/HeroBanderas'; // desactivado — fondo ahora es color sólido configurable
 import SeccionContacto from '../components/SeccionContacto';
 import SeccionSobreNosotros from '../components/SeccionSobreNosotros';
 import BannerServicios from '../components/BannerServicios';
@@ -51,8 +51,9 @@ export default function Home({ categoria = '', setCategoria = () => {}, paisesSe
 
   return (
     <>
-      {/* Fondo de banderas — fixed, detrás de todo */}
+      {/* Fondo de banderas — fixed, detrás de todo (desactivado, ver import arriba)
       <HeroBanderas />
+      */}
 
       {/* Contenido — z-index 1 para ir encima del fondo */}
       <div className="max-w-7xl mx-auto px-4 py-6" style={{ position: 'relative', zIndex: 1 }}>

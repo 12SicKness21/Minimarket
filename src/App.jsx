@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
+import { obtenerConfigTienda } from './firebase/config-tienda';
 
 // Tienda (eager - se necesita en la home)
 import Home from './tienda/pages/Home';
@@ -48,6 +49,17 @@ export default function App() {
     const unsub = onAuthStateChanged(auth, (user) => setUsuario(user));
     return () => unsub();
   }, []);
+
+  // Color de fondo de la tienda (configurable en el admin) — no aplica en /admin
+  useEffect(() => {
+    if (esAdmin) {
+      document.body.style.backgroundColor = '';
+      return;
+    }
+    obtenerConfigTienda().then((cfg) => {
+      document.body.style.backgroundColor = cfg.colorFondo || '#FFF9E6';
+    });
+  }, [esAdmin]);
 
   return (
     <>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCarrito } from '../../shared/hooks/useCarrito';
 import { obtenerConfigTienda, estaDentroDeHorario } from '../../firebase/config-tienda';
 import { generarMensajeWhatsApp, abrirWhatsApp } from '../../shared/utils/whatsapp';
-import { guardarUltimoPedido, cargarUltimoPedido } from '../../shared/hooks/useUltimoPedido';
+import { guardarUltimoPedido } from '../../shared/hooks/useUltimoPedido';
 import { formatPrecio } from '../../shared/utils/formatters';
 import SelectorEnvio from './SelectorEnvio';
 
@@ -13,7 +13,7 @@ const METODOS_PAGO = [
 ];
 
 export default function CarritoDrawer({ abierto, onCerrar }) {
-  const { items, actualizarCantidad, quitarItem, subtotal, vaciarCarrito, cargarItems } = useCarrito();
+  const { items, actualizarCantidad, quitarItem, subtotal, vaciarCarrito } = useCarrito();
   const [tipoEnvio, setTipoEnvio] = useState('recogida');
   const [metodoPago, setMetodoPago] = useState('efectivo');
   const [pagaraCon, setPagaraCon] = useState('');
@@ -57,11 +57,6 @@ export default function CarritoDrawer({ abierto, onCerrar }) {
     onCerrar();
   }
 
-  function cargarAnterior() {
-    const anterior = cargarUltimoPedido();
-    if (anterior) cargarItems(anterior);
-  }
-
   return (
     <>
       {abierto && <div className="fixed inset-0 bg-black/30 z-40" onClick={onCerrar} />}
@@ -85,9 +80,6 @@ export default function CarritoDrawer({ abierto, onCerrar }) {
               <div className="text-center py-12">
                 <p className="text-4xl mb-3">🛒</p>
                 <p className="text-gray-500">Tu carrito está vacío</p>
-                <button onClick={cargarAnterior} className="mt-4 text-sm text-primario font-semibold hover:underline">
-                  Cargar último pedido
-                </button>
               </div>
             ) : (
               <>
@@ -128,10 +120,6 @@ export default function CarritoDrawer({ abierto, onCerrar }) {
                     </div>
                   ))}
                 </div>
-
-                <button onClick={cargarAnterior} className="text-sm text-primario font-semibold hover:underline">
-                  Cargar último pedido
-                </button>
 
                 <hr />
 
