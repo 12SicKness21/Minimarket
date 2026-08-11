@@ -41,30 +41,31 @@ export default function SeccionCondiciones() {
     obtenerConfigTienda().then(setConfig);
   }, []);
 
-  const textoEntrega = config
-    ? `Entrega en tu barrio desde ${formatPrecio(config.costoEnvioBarrio)}, fuera del barrio desde ${formatPrecio(config.costoEnvioFuera)}.`
-    : 'Coordinamos la entrega en tu zona al confirmar el pedido.';
+  //const textoEntrega = config
+  //? `Entrega en tu barrio desde ${formatPrecio(config.costoEnvioBarrio)}, fuera del barrio desde ${formatPrecio(config.costoEnvioFuera)}.`
+  //: 'Coordinamos la entrega en tu zona al confirmar el pedido.';
 
   const items = [
     {
       icono: IconoAtencion,
       titulo: 'Atención al cliente',
-      texto: 'Resolvemos tus dudas antes y después de tu compra, directo por WhatsApp.',
+      texto: 'Nuestro equipo está preparado para resolver tus dudas y/o incidencias antes y después de tu compra.',
     },
     {
       icono: IconoPagoSeguro,
       titulo: 'Pago seguro',
-      texto: 'Pagas por Bizum o transferencia, coordinado por WhatsApp. Nunca compartimos tus datos bancarios.',
+      texto: 'Forma de pago por Bizum o transferencia bancaria. No compartimos tus datos bancarios.',
     },
     {
       icono: IconoEntrega,
       titulo: 'Entrega a domicilio',
-      texto: textoEntrega,
+      //texto: textoEntrega,
+      texto: 'Envíos peninsulares, países de la Unión Europea entre 3-5 días laborales. Los sábados y domingos no se envían productos. '
     },
     {
       icono: IconoDevoluciones,
       titulo: 'Cambios y devoluciones',
-      texto: 'Hasta 24h para productos perecederos y 7 días para el resto. Te ofrecemos reemplazo o reembolso.',
+      texto: 'Consulta nuestras condiciones de compra para saber cómo y en qué tipo de productos admitimos devoluciones.',
     },
   ];
 
