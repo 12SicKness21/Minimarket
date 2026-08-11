@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react';
-import { obtenerConfigTienda } from '../../firebase/config-tienda';
-import { formatPrecio } from '../../shared/utils/formatters';
 
 function IconoAtencion() {
   return (
@@ -35,16 +32,6 @@ function IconoDevoluciones() {
 }
 
 export default function SeccionCondiciones() {
-  const [config, setConfig] = useState(null);
-
-  useEffect(() => {
-    obtenerConfigTienda().then(setConfig);
-  }, []);
-
-  //const textoEntrega = config
-  //? `Entrega en tu barrio desde ${formatPrecio(config.costoEnvioBarrio)}, fuera del barrio desde ${formatPrecio(config.costoEnvioFuera)}.`
-  //: 'Coordinamos la entrega en tu zona al confirmar el pedido.';
-
   const items = [
     {
       icono: IconoAtencion,
@@ -59,8 +46,7 @@ export default function SeccionCondiciones() {
     {
       icono: IconoEntrega,
       titulo: 'Entrega a domicilio',
-      //texto: textoEntrega,
-      texto: 'Envíos peninsulares, países de la Unión Europea entre 3-5 días laborales. Los sábados y domingos no se envían productos. '
+      texto: 'Envíos peninsulares, países de la Unión Europea entre 3-5 días laborales. Los sábados y domingos no se envían productos.',
     },
     {
       icono: IconoDevoluciones,

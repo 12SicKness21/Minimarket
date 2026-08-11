@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { obtenerConfigTienda } from '../../firebase/config-tienda';
+import { useConfigTienda } from '../../shared/hooks/useConfigTienda';
 
 const REDES_INFO = {
   instagram: {
@@ -32,13 +31,7 @@ const REDES_INFO = {
 };
 
 export default function SeccionContacto() {
-  const [config, setConfig] = useState(null);
-
-  useEffect(() => {
-    obtenerConfigTienda().then(setConfig);
-  }, []);
-
-  if (!config) return null;
+  const { config } = useConfigTienda();
 
   const { redes = {}, ubicacion = {} } = config;
   const redesActivas = Object.entries(redes).filter(([, v]) => v.activo && v.url);

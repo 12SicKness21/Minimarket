@@ -2,7 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { useCarrito } from '../hooks/useCarrito';
 import { obtenerCatalogos } from '../../firebase/catalogos';
-import { obtenerConfigTienda, obtenerServicios } from '../../firebase/config-tienda';
+import { obtenerServicios } from '../../firebase/config-tienda';
+import { useConfigTienda } from '../hooks/useConfigTienda';
 import GaleriaLocal from '../../tienda/components/GaleriaLocal';
 import HistorialPedidos from '../../tienda/components/HistorialPedidos';
 import BanderaPais from './BanderaPais';
@@ -21,7 +22,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
   const [galeriaAbierta, setGaleriaAbierta] = useState(false);
   const [historialAbierto, setHistorialAbierto] = useState(false);
   const [catalogos, setCatalogos] = useState(null);
-  const [config, setConfig] = useState(null);
+  const { config } = useConfigTienda();
   const [servicios, setServicios] = useState(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
@@ -40,7 +41,6 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
   useEffect(() => {
     if (!menuAbierto) return;
     if (!catalogos)  obtenerCatalogos().then(setCatalogos);
-    if (!config)     obtenerConfigTienda().then(setConfig);
     if (!servicios)  obtenerServicios().then((items) => setServicios(items.filter((s) => s.activo !== false)));
   }, [menuAbierto]);
 

@@ -87,7 +87,7 @@ export async function subirImagenLocal(file) {
   return { id, url };
 }
 
-const DOC_REF = doc(db, 'configuracion', 'tienda');
+export const DOC_REF = doc(db, 'configuracion', 'tienda');
 
 export const DEFAULTS = {
   colorFondo: '#FFF9E6',

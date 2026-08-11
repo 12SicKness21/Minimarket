@@ -1,14 +1,8 @@
-import { useState, useEffect } from 'react';
-import { obtenerConfigTienda } from '../../firebase/config-tienda';
+import { useConfigTienda } from '../hooks/useConfigTienda';
 
 export default function BotonWhatsApp() {
-  const [numero, setNumero] = useState(import.meta.env.VITE_WHATSAPP_NUMBER || '');
-
-  useEffect(() => {
-    obtenerConfigTienda().then(cfg => {
-       if (cfg && cfg.whatsapp) setNumero(cfg.whatsapp);
-    });
-  }, []);
+  const { config } = useConfigTienda();
+  const numero = config.whatsapp || import.meta.env.VITE_WHATSAPP_NUMBER || '';
 
   if (!numero) return null;
 

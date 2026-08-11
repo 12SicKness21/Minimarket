@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCarrito } from '../../shared/hooks/useCarrito';
-import { obtenerConfigTienda, estaDentroDeHorario } from '../../firebase/config-tienda';
+import { estaDentroDeHorario } from '../../firebase/config-tienda';
+import { useConfigTienda } from '../../shared/hooks/useConfigTienda';
 import { generarMensajeWhatsApp, abrirWhatsApp } from '../../shared/utils/whatsapp';
 import { guardarUltimoPedido } from '../../shared/hooks/useUltimoPedido';
 import { formatPrecio } from '../../shared/utils/formatters';
@@ -19,15 +20,8 @@ export default function CarritoDrawer({ abierto, onCerrar }) {
   const [pagaraCon, setPagaraCon] = useState('');
   const [direccion, setDireccion] = useState('');
   const [telefono, setTelefono] = useState('');
-  const [config, setConfig] = useState(null);
-  const [horario, setHorario] = useState({ abierto: true, mensaje: '' });
-
-  useEffect(() => {
-    obtenerConfigTienda().then((cfg) => {
-      setConfig(cfg);
-      setHorario(estaDentroDeHorario(cfg));
-    });
-  }, []);
+  const { config } = useConfigTienda();
+  const horario = estaDentroDeHorario(config);
 
   // Resetear "pagará con" al cambiar método de pago
   useEffect(() => {

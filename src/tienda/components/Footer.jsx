@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { obtenerConfigTienda } from '../../firebase/config-tienda';
+import { useConfigTienda } from '../../shared/hooks/useConfigTienda';
 
 const DIAS_CORTO = {
   lunes: 'Lun', martes: 'Mar', miercoles: 'Mié',
@@ -59,11 +58,7 @@ function generarLinkWhatsApp(numero) {
 }
 
 export default function Footer() {
-  const [config, setConfig] = useState(null);
-
-  useEffect(() => {
-    obtenerConfigTienda().then(setConfig);
-  }, []);
+  const { config } = useConfigTienda();
 
   const anio = new Date().getFullYear();
 
