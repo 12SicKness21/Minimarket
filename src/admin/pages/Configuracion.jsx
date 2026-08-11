@@ -107,10 +107,12 @@ export default function Configuracion() {
   async function handleSubmit(e) {
     e.preventDefault();
     setGuardando(true);
+    const costoBarrio = parseFloat(form.costoEnvioBarrio);
+    const costoFuera = parseFloat(form.costoEnvioFuera);
     await guardarConfigTienda({
       ...form,
-      costoEnvioBarrio: parseFloat(form.costoEnvioBarrio) || 2,
-      costoEnvioFuera: parseFloat(form.costoEnvioFuera) || 5,
+      costoEnvioBarrio: Number.isNaN(costoBarrio) ? 2 : costoBarrio,
+      costoEnvioFuera: Number.isNaN(costoFuera) ? 5 : costoFuera,
     });
     setGuardando(false);
     setGuardado(true);
