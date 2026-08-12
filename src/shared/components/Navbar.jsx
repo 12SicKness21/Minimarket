@@ -188,7 +188,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
           <div className="flex items-center gap-2">
             <img src="/icon.png" alt="logo" className="w-8 h-8 object-contain" />
             <span style={{ fontFamily: 'Boogaloo, cursive', color: '#C0DA00', fontSize: '1.3rem' }}>
-              RG MINI MARKET
+              RG MINIMARKET
             </span>
           </div>
           <button onClick={cerrarMenu} className="p-1.5 rounded-full hover:bg-gray-100 transition">
