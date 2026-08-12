@@ -67,7 +67,7 @@ export default function SeccionCombos({ combos = [] }) {
     <section className="mb-8">
       {/* Cabecera — imagen full-width */}
       <div className="w-full mb-3 overflow-hidden" style={{ width: '100vw', position: 'relative', left: '50%', transform: 'translateX(-50%)' }}>
-        <img src="/combo.avif" alt="Combos" className="w-full object-cover" style={{ maxHeight: 80 }} />
+        <img src="/combo.avif" alt="Combos" className="w-full object-cover" style={{ maxHeight: 130 }} />
       </div>
 
       <div
