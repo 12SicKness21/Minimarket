@@ -187,7 +187,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
           <div className="flex items-center gap-2">
             <img src="/icon.png" alt="logo" className="w-8 h-8 object-contain" />
-            <span style={{ fontFamily: 'Boogaloo, cursive', color: '#93C572', fontSize: '1.3rem' }}>
+            <span style={{ fontFamily: 'Boogaloo, cursive', color: '#C0DA00', fontSize: '1.3rem' }}>
               RG MINI MARKET
             </span>
           </div>

@@ -87,7 +87,7 @@ export default function Footer() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <img src="/icon.png" alt="logo" className="w-8 h-8 object-contain" />
-            <span style={{ fontFamily: 'Boogaloo, cursive', color: '#93C572', fontSize: '1.3rem' }}>
+            <span style={{ fontFamily: 'Boogaloo, cursive', color: '#C0DA00', fontSize: '1.3rem' }}>
               RG MINI MARKET
             </span>
           </div>
