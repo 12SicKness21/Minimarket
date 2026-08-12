@@ -4,7 +4,7 @@ export function generarMensajeWhatsApp({ items, subtotal, costoEnvio, total, tip
     .join('\n');
 
   const etiquetaEnvio = {
-    recogida: '🏪 Recogida en tienda — Gratis',
+    recogida: 'Recogida en tienda — Gratis',
     barrio: `🚚 Envío en mi barrio — ${costoEnvio.toFixed(2)}€`,
     fuera: `🚚 Envío fuera del barrio — ${costoEnvio.toFixed(2)}€`
   }[tipoEnvio];

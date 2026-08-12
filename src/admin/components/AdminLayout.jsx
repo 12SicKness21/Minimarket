@@ -25,8 +25,8 @@ export default function AdminLayout({ children }) {
       <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
         <div className="p-4 border-b">
           <Link to="/admin/productos" className="flex items-center gap-2 font-display font-extrabold text-xl text-primario">
-            <img src="/icon.png" alt="Minimarket" className="w-8 h-8 object-contain" />
-            Minimarket
+            <img src="/icon.png" alt="RG Minimarket" className="w-8 h-8 object-contain" />
+            RG Minimarket
           </Link>
           <p className="text-xs text-gray-400 mt-1">Panel de administración</p>
         </div>
@@ -38,8 +38,8 @@ export default function AdminLayout({ children }) {
                 key={item.path}
                 to={item.path}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activo
-                    ? 'bg-green-50 text-primario'
-                    : 'text-gray-600 hover:bg-gray-50'
+                  ? 'bg-green-50 text-primario'
+                  : 'text-gray-600 hover:bg-gray-50'
                   }`}
               >
                 <span>{item.icon}</span>
