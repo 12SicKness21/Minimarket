@@ -112,7 +112,7 @@ export default function Navbar({ onAbrirCarrito, onSelectCategoria, onSelectPais
             <img
               src="/tienda_online_titulo.webp"
               alt="RG Mini Market — Tienda online"
-              className="h-10 w-auto object-contain"
+              className="h-14 w-auto object-contain"
             />
           </Link>
 
