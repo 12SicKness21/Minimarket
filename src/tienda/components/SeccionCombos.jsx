@@ -107,7 +107,7 @@ export default function SeccionCombos({ combos = [] }) {
     <section className="mb-8">
       {/* Cabecera — imagen redondeada integrada en el grid */}
       <div className="w-full mb-4 overflow-hidden rounded-2xl shadow-sm border border-gray-100">
-        <img src="/combo.avif" alt="Combos" className="w-full object-cover" style={{ maxHeight: 120 }} />
+        <img src="/combo.avif" alt="Combos" className="w-full object-cover" style={{ maxHeight: 100 }} />
       </div>
 
       <div
