@@ -13,6 +13,7 @@ import CarritoDrawer from './tienda/components/CarritoDrawer';
 import ToastCarrito from './shared/components/ToastCarrito';
 import BannerCerrado from './tienda/components/BannerCerrado';
 import Footer from './tienda/components/Footer';
+import ActualizacionPWA from './shared/components/ActualizacionPWA';
 
 // Admin (lazy - solo se descarga al entrar a /admin)
 const Login = lazy(() => import('./admin/pages/Login'));
@@ -58,6 +59,8 @@ export default function App() {
 
   return (
     <>
+      <ActualizacionPWA />
+
       {!esAdmin && (
         <>
           <Navbar

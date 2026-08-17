@@ -7,6 +7,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Registro manual desde React (ver ActualizacionPWA.jsx) en vez del
+      // script auto-inyectado, que solo registra una vez y nunca vuelve a
+      // chequear si hay una versión nueva.
+      injectRegister: null,
       includeAssets: ['favicon.svg', 'icon.png', 'icon-maskable.png'],
       manifest: {
         name: 'Minimarket',
