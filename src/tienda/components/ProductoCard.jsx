@@ -53,7 +53,7 @@ export default function ProductoCard({ producto }) {
       >
         {/* ── Cara frontal ── */}
         <div
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col h-full"
+          className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden md:hover:shadow-md transition group flex flex-col h-full"
           style={{ backfaceVisibility: 'hidden' }}
         >
           {/* Imagen */}
@@ -63,8 +63,8 @@ export default function ProductoCard({ producto }) {
               alt={producto.nombre}
               draggable={false}
               className={producto.imagenUrl
-                ? 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none'
-                : 'w-full h-full object-contain p-8 opacity-40 select-none'}
+                ? 'w-full h-full object-cover md:group-hover:scale-105 transition-transform duration-300 select-none pointer-events-none'
+                : 'w-full h-full object-contain p-8 opacity-40 select-none pointer-events-none'}
               loading="lazy"
             />
             {producto.recienLlegado && (
