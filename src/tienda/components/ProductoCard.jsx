@@ -45,7 +45,7 @@ export default function ProductoCard({ producto }) {
         aria-label={volteada ? `Ver frente de ${producto.nombre}` : `Ver detalles de ${producto.nombre}`}
         onClick={voltear}
         onKeyDown={handleKeyDown}
-        className="product-flip-inner relative w-full h-full cursor-pointer"
+        className="product-flip-inner relative w-full h-full cursor-pointer touch-pan-y"
         style={{
           transformStyle: 'preserve-3d',
           transform: volteada ? 'rotateY(180deg)' : 'rotateY(0deg)',
@@ -61,9 +61,10 @@ export default function ProductoCard({ producto }) {
             <img
               src={producto.imagenUrl || '/icon.png'}
               alt={producto.nombre}
+              draggable={false}
               className={producto.imagenUrl
-                ? 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-                : 'w-full h-full object-contain p-8 opacity-40'}
+                ? 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none'
+                : 'w-full h-full object-contain p-8 opacity-40 select-none'}
               loading="lazy"
             />
             {producto.recienLlegado && (
