@@ -93,7 +93,6 @@ body {
 /* Tarjeta de producto que gira (frente/detalle) */
 .product-flip-inner {
   transition: transform 0.6s;
-  touch-action: pan-y pinch-zoom !important;
 }
 @media (prefers-reduced-motion: reduce) {
   .product-flip-inner {

@@ -40,12 +40,7 @@ export default function ProductoCard({ producto }) {
   return (
     <div className="h-full" style={{ perspective: 1200 }}>
       <div
-        role="button"
-        tabIndex={0}
-        aria-label={volteada ? `Ver frente de ${producto.nombre}` : `Ver detalles de ${producto.nombre}`}
-        onClick={voltear}
-        onKeyDown={handleKeyDown}
-        className="product-flip-inner relative w-full h-full cursor-pointer touch-pan-y"
+        className="product-flip-inner relative w-full h-full touch-pan-y"
         style={{
           transformStyle: 'preserve-3d',
           transform: volteada ? 'rotateY(180deg)' : 'rotateY(0deg)',
@@ -56,15 +51,23 @@ export default function ProductoCard({ producto }) {
           className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden md:hover:shadow-md transition group flex flex-col h-full"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          {/* Imagen */}
-          <div className="aspect-square bg-gray-50 relative overflow-hidden">
+          {/* Imagen — zona tappable para voltear */}
+          <div
+            role="button"
+            tabIndex={0}
+            aria-label={volteada ? `Ver frente de ${producto.nombre}` : `Ver detalles de ${producto.nombre}`}
+            onClick={voltear}
+            onKeyDown={handleKeyDown}
+            className="aspect-square bg-gray-50 relative overflow-hidden cursor-pointer"
+            style={{ touchAction: 'manipulation' }}
+          >
             <img
               src={producto.imagenUrl || '/icon.png'}
               alt={producto.nombre}
               draggable={false}
               className={producto.imagenUrl
-                ? 'w-full h-full object-cover md:group-hover:scale-105 transition-transform duration-300 select-none pointer-events-none'
-                : 'w-full h-full object-contain p-8 opacity-40 select-none pointer-events-none'}
+                ? 'w-full h-full object-cover md:group-hover:scale-105 transition-transform duration-300 select-none'
+                : 'w-full h-full object-contain p-8 opacity-40 select-none'}
               loading="lazy"
             />
             {producto.recienLlegado && (
